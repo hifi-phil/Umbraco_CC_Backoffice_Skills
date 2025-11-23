@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dotnet new:*)",
+      "SlashCommand(/create-umbraco-skills:*)",
+      "WebSearch"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
