@@ -21,6 +21,19 @@ Always fetch the latest docs before implementing:
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 - **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
 
+## Related Foundation Skills
+
+If you need to explain these foundational concepts when implementing sections, reference these skills:
+
+- **Context API**: When implementing section contexts or explaining how section extensions communicate
+  - Reference skill: `umbraco-context-api`
+
+- **Conditions**: When implementing permissions, user group access, visibility controls, or section restrictions
+  - Reference skill: `umbraco-conditions`
+
+- **Routing**: When implementing pathnames, navigation patterns, URLs, or section routing
+  - Reference skill: `umbraco-routing`
+
 ## Workflow
 
 1. **Fetch docs** - Use WebFetch on the URLs above

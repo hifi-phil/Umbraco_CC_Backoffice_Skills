@@ -19,6 +19,25 @@ Always fetch the latest docs before implementing:
 - **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
 - **Tutorial**: https://docs.umbraco.com/umbraco-cms/tutorials/creating-a-custom-dashboard
 
+## Related Foundation Skills
+
+If you need to explain these foundational concepts when implementing dashboards, reference these skills:
+
+- **Umbraco Element / UmbElementMixin**: When implementing dashboard elements, explaining UmbElementMixin, UmbLitElement, or base class patterns
+  - Reference skill: `umbraco-umbraco-element`
+
+- **Context API**: When implementing context consumption (consumeContext), providing contexts, or accessing services like UMB_NOTIFICATION_CONTEXT
+  - Reference skill: `umbraco-context-api`
+
+- **Localization**: When implementing translations, using localize.term(), or adding multi-language support
+  - Reference skill: `umbraco-localization`
+
+- **State Management**: When implementing reactive state, using observables, UmbState, or @state() decorator
+  - Reference skill: `umbraco-state-management`
+
+- **Conditions**: When implementing visibility controls, section restrictions, or conditional rendering
+  - Reference skill: `umbraco-conditions`
+
 ## Workflow
 
 1. **Fetch docs** - Use WebFetch on the URLs above

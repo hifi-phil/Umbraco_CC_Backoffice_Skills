@@ -3,7 +3,9 @@
     "allow": [
       "Bash(dotnet new:*)",
       "SlashCommand(/create-umbraco-skills:*)",
-      "WebSearch"
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []

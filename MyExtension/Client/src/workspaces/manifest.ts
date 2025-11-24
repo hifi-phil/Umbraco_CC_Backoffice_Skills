@@ -3,10 +3,9 @@ const workspaceAlias = "My.Workspace.Demo";
 export const manifests: Array<UmbExtensionManifest> = [
   {
     type: "workspace",
-    kind: "default",
     alias: workspaceAlias,
     name: "Demo Workspace",
-    element: () => import("./demo-workspace.element.js"),
+    element: ()=> import('./demo-workspace.element.js'),
     meta: {
       entityType: "demo-workspace",
     },
@@ -15,7 +14,8 @@ export const manifests: Array<UmbExtensionManifest> = [
     type: "workspaceView",
     alias: "My.WorkspaceView.Demo",
     name: "Demo Workspace View",
-    element: () => import("./demo-workspace.element.js"),
+    js: () => import("./demo-workspace.element.js"),
+    weight: 100,
     meta: {
       label: "Overview",
       pathname: "overview",

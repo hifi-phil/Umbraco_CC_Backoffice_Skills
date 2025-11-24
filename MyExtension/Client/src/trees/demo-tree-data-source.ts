@@ -18,7 +18,7 @@ export class DemoTreeDataSource extends UmbControllerBase implements UmbTreeData
       {
         unique: "item-1",
         name: "Item 1",
-        entityType: "demo-tree-item",
+        entityType: "demo-workspace",
         hasChildren: true,
         isFolder: true,
         parent: { unique: "null", entityType: "demo-tree-root" },
@@ -26,7 +26,7 @@ export class DemoTreeDataSource extends UmbControllerBase implements UmbTreeData
       {
         unique: "item-2",
         name: "Item 2",
-        entityType: "demo-tree-item",
+        entityType: "demo-workspace",
         hasChildren: false,
         isFolder: false,
         parent: { unique: "null", entityType: "demo-tree-root" },
@@ -48,7 +48,7 @@ export class DemoTreeDataSource extends UmbControllerBase implements UmbTreeData
         {
           unique: "item-1",
           name: "Item 1",
-          entityType: "demo-tree-item",
+          entityType: "demo-workspace",
           hasChildren: true,
           isFolder: true,
           parent: { unique: "null", entityType: "demo-tree-root" },
@@ -56,7 +56,7 @@ export class DemoTreeDataSource extends UmbControllerBase implements UmbTreeData
         {
           unique: "item-2",
           name: "Item 2",
-          entityType: "demo-tree-item",
+          entityType: "demo-workspace",
           hasChildren: false,
           isFolder: false,
           parent: { unique: "null", entityType: "demo-tree-root" },
@@ -68,18 +68,18 @@ export class DemoTreeDataSource extends UmbControllerBase implements UmbTreeData
         {
           unique: "item-1-1",
           name: "Sub Item 1.1",
-          entityType: "demo-tree-item",
+          entityType: "demo-workspace",
           hasChildren: false,
           isFolder: false,
-          parent: { unique: "item-1", entityType: "demo-tree-item" },
+          parent: { unique: "item-1", entityType: "demo-workspace" },
         },
         {
           unique: "item-1-2",
           name: "Sub Item 1.2",
-          entityType: "demo-tree-item",
+          entityType: "demo-workspace",
           hasChildren: false,
           isFolder: false,
-          parent: { unique: "item-1", entityType: "demo-tree-item" },
+          parent: { unique: "item-1", entityType: "demo-workspace" },
         }
       );
     }
@@ -96,7 +96,7 @@ export class DemoTreeDataSource extends UmbControllerBase implements UmbTreeData
       ancestors.push({
         unique: "item-1",
         name: "Item 1",
-        entityType: "demo-tree-item",
+        entityType: "demo-workspace",
         hasChildren: true,
         isFolder: true,
         parent: { unique: "", entityType: "demo-tree-root" },

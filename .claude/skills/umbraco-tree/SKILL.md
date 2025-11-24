@@ -19,6 +19,19 @@ Always fetch the latest docs before implementing:
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 - **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
 
+## Related Foundation Skills
+
+If you need to explain these foundational concepts when implementing trees, reference these skills:
+
+- **Repository Pattern**: When implementing tree data sources, repositories, data fetching, or CRUD operations
+  - Reference skill: `umbraco-repository-pattern`
+
+- **Context API**: When implementing repository contexts or explaining how repositories connect to UI components
+  - Reference skill: `umbraco-context-api`
+
+- **State Management**: When implementing reactive tree updates, observables, or managing tree state
+  - Reference skill: `umbraco-state-management`
+
 ## Workflow
 
 1. **Fetch docs** - Use WebFetch on the URLs above

@@ -18,6 +18,19 @@ Always fetch the latest docs before implementing:
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 - **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
 
+## Related Foundation Skills
+
+If you need to explain these foundational concepts when implementing header apps, reference these skills:
+
+- **Umbraco Element**: When implementing interactive header apps, explaining UmbHeaderAppButtonElement, or custom elements
+  - Reference skill: `umbraco-umbraco-element`
+
+- **Context API**: When implementing context access, modals, notifications, or services from header apps
+  - Reference skill: `umbraco-context-api`
+
+- **Controllers**: When implementing controllers, action handlers, click handlers, or header app behavior
+  - Reference skill: `umbraco-controllers`
+
 ## Workflow
 
 1. **Fetch docs** - Use WebFetch on the URLs above

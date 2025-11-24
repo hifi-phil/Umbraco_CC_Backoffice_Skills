@@ -1,6 +1,9 @@
+import { manifests as menuManifests } from "./menu-item-manifest.js";
+
 const repositoryAlias = "My.Repository.Demo.Tree";
 
 export const manifests: Array<UmbExtensionManifest> = [
+  ...menuManifests,
   {
     type: "repository",
     alias: repositoryAlias,
@@ -21,6 +24,6 @@ export const manifests: Array<UmbExtensionManifest> = [
     kind: "default",
     alias: "My.TreeItem.Demo",
     name: "Demo Tree Item",
-    forEntityTypes: ["demo-tree-item", "demo-tree-root"],
+    forEntityTypes: ["demo-workspace", "demo-tree-root"],
   },
 ];

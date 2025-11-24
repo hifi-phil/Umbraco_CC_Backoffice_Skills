@@ -1,6 +1,6 @@
-import { UmbTreeRepositoryBase as i } from "@umbraco-cms/backoffice/tree";
-import { UmbControllerBase as o } from "@umbraco-cms/backoffice/class-api";
-class m extends o {
+import { UmbTreeRepositoryBase as r } from "@umbraco-cms/backoffice/tree";
+import { UmbControllerBase as i } from "@umbraco-cms/backoffice/class-api";
+class s extends i {
   constructor(e) {
     super(e);
   }
@@ -10,7 +10,7 @@ class m extends o {
       {
         unique: "item-1",
         name: "Item 1",
-        entityType: "demo-tree-item",
+        entityType: "demo-workspace",
         hasChildren: !0,
         isFolder: !0,
         parent: { unique: "null", entityType: "demo-tree-root" }
@@ -18,7 +18,7 @@ class m extends o {
       {
         unique: "item-2",
         name: "Item 2",
-        entityType: "demo-tree-item",
+        entityType: "demo-workspace",
         hasChildren: !1,
         isFolder: !1,
         parent: { unique: "null", entityType: "demo-tree-root" }
@@ -33,7 +33,7 @@ class m extends o {
       {
         unique: "item-1",
         name: "Item 1",
-        entityType: "demo-tree-item",
+        entityType: "demo-workspace",
         hasChildren: !0,
         isFolder: !0,
         parent: { unique: "null", entityType: "demo-tree-root" }
@@ -41,7 +41,7 @@ class m extends o {
       {
         unique: "item-2",
         name: "Item 2",
-        entityType: "demo-tree-item",
+        entityType: "demo-workspace",
         hasChildren: !1,
         isFolder: !1,
         parent: { unique: "null", entityType: "demo-tree-root" }
@@ -50,18 +50,18 @@ class m extends o {
       {
         unique: "item-1-1",
         name: "Sub Item 1.1",
-        entityType: "demo-tree-item",
+        entityType: "demo-workspace",
         hasChildren: !1,
         isFolder: !1,
-        parent: { unique: "item-1", entityType: "demo-tree-item" }
+        parent: { unique: "item-1", entityType: "demo-workspace" }
       },
       {
         unique: "item-1-2",
         name: "Sub Item 1.2",
-        entityType: "demo-tree-item",
+        entityType: "demo-workspace",
         hasChildren: !1,
         isFolder: !1,
-        parent: { unique: "item-1", entityType: "demo-tree-item" }
+        parent: { unique: "item-1", entityType: "demo-workspace" }
       }
     )), console.log("Returning items:", t), { data: { items: t, total: t.length } };
   }
@@ -70,16 +70,16 @@ class m extends o {
     return (n === "item-1-1" || n === "item-1-2") && t.push({
       unique: "item-1",
       name: "Item 1",
-      entityType: "demo-tree-item",
+      entityType: "demo-workspace",
       hasChildren: !0,
       isFolder: !0,
       parent: { unique: "", entityType: "demo-tree-root" }
     }), { data: t };
   }
 }
-class l extends i {
+class l extends r {
   constructor(e) {
-    super(e, m);
+    super(e, s);
   }
   async requestTreeRoot() {
     return {
@@ -97,4 +97,4 @@ export {
   l as api,
   l as default
 };
-//# sourceMappingURL=demo-tree-repository-CKb_0bPO.js.map
+//# sourceMappingURL=demo-tree-repository-DmV7cSkn.js.map

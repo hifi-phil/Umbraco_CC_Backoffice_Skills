@@ -20,6 +20,19 @@ Always fetch the latest docs before implementing:
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 - **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
 
+## Related Foundation Skills
+
+If you need to explain these foundational concepts when implementing modals, reference these skills:
+
+- **Context API**: When implementing modal manager context, consumeContext patterns, or explaining how to open modals
+  - Reference skill: `umbraco-context-api`
+
+- **Umbraco Element**: When implementing modal elements, explaining UmbLitElement, or creating modal components
+  - Reference skill: `umbraco-umbraco-element`
+
+- **State Management**: When implementing modal data flow, modal values, or state management between modal and caller
+  - Reference skill: `umbraco-state-management`
+
 ## Workflow
 
 1. **Fetch docs** - Use WebFetch on the URLs above

@@ -1,5 +1,4 @@
-import { UMB_SECTION_ALIAS_CONDITION_ALIAS as t } from "@umbraco-cms/backoffice/section";
-const i = [
+const o = [
   {
     name: "My Extension Entrypoint",
     alias: "MyExtension.Entrypoint",
@@ -36,14 +35,48 @@ const i = [
     conditions: [
       {
         alias: "Umb.Condition.SectionAlias",
-        match: "Umb.Section.Content"
+        match: "My.Section.Demo"
       }
     ]
   }
-], e = "My.Section.Demo", m = [
+], a = "My.Section.Demo", i = {
+  type: "menu",
+  alias: "time.menu",
+  name: "time sidebar menu",
+  meta: {
+    label: "Time"
+  }
+}, m = {
+  type: "menuItem",
+  alias: "time.menu,item",
+  name: "time menu item",
+  meta: {
+    label: "Time Zones",
+    icon: "icon-alarm-clock",
+    entityType: "demo-workspace",
+    menus: [
+      "time.menu"
+    ]
+  }
+}, s = {
+  type: "sectionSidebarApp",
+  kind: "menuWithEntityActions",
+  alias: "My.Section.Demo.SidebarApp",
+  name: "Sidebar app",
+  meta: {
+    label: "Time",
+    menu: "time.menu"
+  },
+  conditions: [
+    {
+      alias: "Umb.Condition.SectionAlias",
+      match: a
+    }
+  ]
+}, c = [
   {
     type: "section",
-    alias: e,
+    alias: a,
     name: "Demo Section",
     weight: 100,
     meta: {
@@ -51,29 +84,34 @@ const i = [
       pathname: "demo"
     }
   },
+  s,
+  i,
+  m
+], r = [
   {
-    type: "sectionView",
-    alias: "My.SectionView.Demo",
-    name: "Demo Section View",
-    element: () => import("./demo-section-view.element-BsaYm038.js"),
+    type: "menuItem",
+    alias: "My.MenuItem.DemoTree",
+    name: "Demo Tree Menu Item",
+    weight: 100,
     meta: {
-      label: "Demo Overview",
-      pathname: "overview",
-      icon: "icon-home"
-    },
-    conditions: [
-      {
-        alias: t,
-        match: e
-      }
-    ]
+      label: "Demo Items",
+      icon: "icon-folder",
+      entityType: "demo-tree-root",
+      menus: ["Umb.Menu.Demo"]
+    }
+  },
+  {
+    type: "menu",
+    alias: "Umb.Menu.Demo",
+    name: "Demo Menu"
   }
-], o = "My.Repository.Demo.Tree", s = [
+], e = "My.Repository.Demo.Tree", p = [
+  ...r,
   {
     type: "repository",
-    alias: o,
+    alias: e,
     name: "Demo Tree Repository",
-    api: () => import("./demo-tree-repository-CKb_0bPO.js")
+    api: () => import("./demo-tree-repository-DmV7cSkn.js")
   },
   {
     type: "tree",
@@ -81,7 +119,7 @@ const i = [
     alias: "My.Tree.Demo",
     name: "Demo Tree",
     meta: {
-      repositoryAlias: o
+      repositoryAlias: e
     }
   },
   {
@@ -89,13 +127,12 @@ const i = [
     kind: "default",
     alias: "My.TreeItem.Demo",
     name: "Demo Tree Item",
-    forEntityTypes: ["demo-tree-item", "demo-tree-root"]
+    forEntityTypes: ["demo-workspace", "demo-tree-root"]
   }
-], a = "My.Workspace.Demo", r = [
+], t = "My.Workspace.Demo", l = [
   {
     type: "workspace",
-    kind: "default",
-    alias: a,
+    alias: t,
     name: "Demo Workspace",
     element: () => import("./demo-workspace.element-DwrlKVxN.js"),
     meta: {
@@ -106,7 +143,8 @@ const i = [
     type: "workspaceView",
     alias: "My.WorkspaceView.Demo",
     name: "Demo Workspace View",
-    element: () => import("./demo-workspace.element-DwrlKVxN.js"),
+    js: () => import("./demo-workspace.element-DwrlKVxN.js"),
+    weight: 100,
     meta: {
       label: "Overview",
       pathname: "overview",
@@ -115,18 +153,18 @@ const i = [
     conditions: [
       {
         alias: "Umb.Condition.WorkspaceAlias",
-        match: a
+        match: t
       }
     ]
   }
-], p = [
-  ...i,
+], y = [
+  ...o,
   ...n,
-  ...m,
-  ...s,
-  ...r
+  ...c,
+  ...p,
+  ...l
 ];
 export {
-  p as manifests
+  y as manifests
 };
 //# sourceMappingURL=my-extension.js.map

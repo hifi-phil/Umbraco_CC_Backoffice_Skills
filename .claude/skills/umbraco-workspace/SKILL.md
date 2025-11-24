@@ -21,6 +21,22 @@ Always fetch the latest docs before implementing:
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 - **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
 
+## Related Foundation Skills
+
+If you need to explain these foundational concepts when implementing workspaces, reference these skills:
+
+- **Context API**: When implementing workspace contexts, context consumption, or explaining workspace extension communication
+  - Reference skill: `umbraco-context-api`
+
+- **State Management**: When implementing draft state, observables, reactive updates, or workspace data management
+  - Reference skill: `umbraco-state-management`
+
+- **Umbraco Element**: When implementing workspace view elements, explaining UmbElementMixin, or creating workspace components
+  - Reference skill: `umbraco-umbraco-element`
+
+- **Controllers**: When implementing workspace actions, controllers, side effects, or action logic
+  - Reference skill: `umbraco-controllers`
+
 ## Workflow
 
 1. **Fetch docs** - Use WebFetch on the URLs above
