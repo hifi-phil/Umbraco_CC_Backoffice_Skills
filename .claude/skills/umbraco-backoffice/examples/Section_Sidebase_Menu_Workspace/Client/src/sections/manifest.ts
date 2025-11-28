@@ -1,5 +1,5 @@
-import { ManifestMenu, ManifestMenuItem } from "@umbraco-cms/backoffice/menu";
-import { ManifestSectionSidebarApp } from "@umbraco-cms/backoffice/section";
+import type { ManifestMenu, ManifestMenuItem } from "@umbraco-cms/backoffice/menu";
+import type { ManifestSectionSidebarApp } from "@umbraco-cms/backoffice/section";
 
 // Section alias - used to link components together
 const sectionAlias = "Blueprint.Section";

@@ -1,5 +1,5 @@
 import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
-import { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
+import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { TimeManagementDataSource } from "./sources/time.datasource.js";
 
 export class TimeManagementRepository extends UmbControllerBase {
@@ -8,8 +8,6 @@ export class TimeManagementRepository extends UmbControllerBase {
     constructor(host: UmbControllerHost) {
         super(host);
         this.#timeDataSource = new TimeManagementDataSource();
-
-        console.log('repository constructor');
     }
 
     async getTime() {

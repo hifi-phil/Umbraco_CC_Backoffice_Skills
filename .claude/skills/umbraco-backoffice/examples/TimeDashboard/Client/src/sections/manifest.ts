@@ -1,8 +1,8 @@
 export const manifests: Array<UmbExtensionManifest> = [
     {
         type: 'section',
-        alias: 'time.section',
-        name: 'time section',
+        alias: 'TimeDashboard.Section.Main',
+        name: 'TimeDashboard Section',
         weight: 10,
         meta: {
             label: 'Time',

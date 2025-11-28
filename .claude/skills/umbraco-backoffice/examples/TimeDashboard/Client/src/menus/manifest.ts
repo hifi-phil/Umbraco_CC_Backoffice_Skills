@@ -4,43 +4,43 @@ import type { ManifestMenu, ManifestMenuItem, ManifestSectionSidebarAppBaseMenu,
 const sidebarAppManifest: ManifestSectionSidebarAppBaseMenu = {
     type: 'sectionSidebarApp',
     kind: 'menuWithEntityActions',
-    alias: 'time.sidebar.app',
-    name: 'Sidebar app',
+    alias: 'TimeDashboard.SidebarApp',
+    name: 'TimeDashboard Sidebar App',
     meta: {
         label: "Time",
-        menu: "time.nested.menu"
+        menu: "TimeDashboard.Menu.Nested"
     },
     conditions: [
         {
             alias: "Umb.Condition.SectionAlias",
-            match: "time.section"
+            match: "TimeDashboard.Section.Main"
         }
     ]
 };
 
 const menuManifest: ManifestMenu = {
     type: 'menu',
-    alias: 'time.menu',
-    name: 'time sidebar menu',
+    alias: 'TimeDashboard.Menu.Main',
+    name: 'TimeDashboard Sidebar Menu',
     meta: {
-        label: 'time'
+        label: 'Time'
     }
-}
+};
 
 const menuItemManifest: ManifestMenuItem = {
     type: 'menuItem',
-    alias: 'time.menu.item',
-    name: 'time menu item',
+    alias: 'TimeDashboard.MenuItem.TimeZones',
+    name: 'TimeDashboard Time Zones Menu Item',
     meta: {
         label: 'Time zones',
         icon: 'icon-alarm-clock',
         entityType: 'time-workspace',
         menus: [
-            'time.menu'
+            'TimeDashboard.Menu.Main'
         ]
     },
     element: () => import('./nested-menu.element.js')
-}
+};
 
 export interface ManifestTimeMenuItem extends ManifestElement<UmbMenuItemElement> {
     type: 'time-menu-item';
@@ -49,38 +49,38 @@ export interface ManifestTimeMenuItem extends ManifestElement<UmbMenuItemElement
 
 const nestedMenuManifest: ManifestMenu = {
     type: 'menu',
-    alias: 'time.nested.menu',
-    name: 'Nested menu',
+    alias: 'TimeDashboard.Menu.Nested',
+    name: 'TimeDashboard Nested Menu',
     element: () => import('./nested-menu.element.js'),
     meta: {
         label: 'Time zones',
         icon: 'icon-alarm-clock',
         entityType: 'time-workspace',
     }
-}
+};
 
 const nestedMenuItems: ManifestTimeMenuItem[] = [
     {
         type: 'time-menu-item',
-        alias: 'time.nested.menu.child-one',
-        name: 'child item',
+        alias: 'TimeDashboard.MenuItem.Child1',
+        name: 'TimeDashboard Child Item 1',
         weight: 200,
         meta: {
             menus: [nestedMenuManifest.alias],
             icon: 'icon-alarm-clock',
-            label: 'child item 1',
+            label: 'Child Item 1',
             entityType: 'time-workspace',
         }
     },
     {
         type: 'time-menu-item',
-        alias: 'time.nested.menu.child-two',
-        name: 'child item two',
+        alias: 'TimeDashboard.MenuItem.Child2',
+        name: 'TimeDashboard Child Item 2',
         weight: 200,
         meta: {
             menus: [nestedMenuManifest.alias],
             icon: 'icon-alarm-clock',
-            label: 'child item 2',
+            label: 'Child Item 2',
             entityType: 'time-workspace',
         }
     }

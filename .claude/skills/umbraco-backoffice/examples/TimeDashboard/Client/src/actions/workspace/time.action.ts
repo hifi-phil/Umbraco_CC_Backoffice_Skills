@@ -1,7 +1,9 @@
-import { UmbWorkspaceActionArgs, UmbWorkspaceActionBase } from "@umbraco-cms/backoffice/workspace";
-import { UmbDocumentWorkspaceContext } from "@umbraco-cms/backoffice/document";
-import { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
-import { UMB_NOTIFICATION_CONTEXT, UmbNotificationContext } from "@umbraco-cms/backoffice/notification";
+import type { UmbWorkspaceActionArgs } from "@umbraco-cms/backoffice/workspace";
+import { UmbWorkspaceActionBase } from "@umbraco-cms/backoffice/workspace";
+import type { UmbDocumentWorkspaceContext } from "@umbraco-cms/backoffice/document";
+import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
+import type { UmbNotificationContext } from "@umbraco-cms/backoffice/notification";
+import { UMB_NOTIFICATION_CONTEXT } from "@umbraco-cms/backoffice/notification";
 
 export class TimeAction extends UmbWorkspaceActionBase<UmbDocumentWorkspaceContext> {
 
@@ -12,18 +14,15 @@ export class TimeAction extends UmbWorkspaceActionBase<UmbDocumentWorkspaceConte
 
         this.consumeContext(UMB_NOTIFICATION_CONTEXT, (instance) => {
             this.#notificationContext = instance;
-        })
+        });
     }
 
     async execute(): Promise<void> {
-        console.log('action execute');
-
         this.#notificationContext?.peek('warning', {
             data: {
-                headline: 'A thing has happened !',
-                message: 'What that thing is? only time will tell.'
+                headline: 'A thing has happened!',
+                message: 'What that thing is? Only time will tell.'
             }
-        })
-
+        });
     }
 }

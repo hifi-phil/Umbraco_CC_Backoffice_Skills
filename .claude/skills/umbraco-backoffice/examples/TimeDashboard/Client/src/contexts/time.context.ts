@@ -1,10 +1,13 @@
 import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
-import { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
+import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { UmbContextToken } from "@umbraco-cms/backoffice/context-api";
 import { UmbBooleanState, UmbStringState } from "@umbraco-cms/backoffice/observable-api";
 
 import { TimeManagementRepository } from "../repository/time.repository.js";
 
+/**
+ * Context for managing time-related data and polling state.
+ */
 export class TimeManagementContext extends UmbControllerBase {
 
     #repository: TimeManagementRepository;
@@ -15,6 +18,11 @@ export class TimeManagementContext extends UmbControllerBase {
     #date = new UmbStringState("unknown");
     public readonly date = this.#date.asObservable();
 
+    #intervalId: ReturnType<typeof setInterval> | null = null;
+
+    #polling = new UmbBooleanState(false);
+    public readonly polling = this.#polling.asObservable();
+
     constructor(host: UmbControllerHost) {
         super(host);
 
@@ -23,7 +31,7 @@ export class TimeManagementContext extends UmbControllerBase {
     }
 
     async getTime() {
-        const {data} = await this.#repository.getTime();
+        const { data } = await this.#repository.getTime();
 
         if (data) {
             this.#time.setValue(data);
@@ -31,7 +39,7 @@ export class TimeManagementContext extends UmbControllerBase {
     }
 
     async getDate() {
-        const {data} = await this.#repository.getDate();
+        const { data } = await this.#repository.getDate();
 
         if (data) {
             this.#date.setValue(data);
@@ -39,14 +47,8 @@ export class TimeManagementContext extends UmbControllerBase {
     }
 
     async getDateAndTime() {
-        this.getTime();
-        this.getDate();
+        await Promise.all([this.getTime(), this.getDate()]);
     }
-
-    #intervalId: number | null = null;
-
-    #polling = new UmbBooleanState(false);
-    polling = this.#polling.asObservable();
 
     togglePolling() {
         const isEnabled = !this.#polling.getValue();
@@ -55,18 +57,35 @@ export class TimeManagementContext extends UmbControllerBase {
         if (isEnabled) {
             this.#intervalId = setInterval(() => {
                 this.getDateAndTime();
-            }, 750) as unknown as number;
+            }, 750);
             return;
         }
 
-        clearInterval(this.#intervalId as number);
+        if (this.#intervalId !== null) {
+            clearInterval(this.#intervalId);
+            this.#intervalId = null;
+        }
     }
 
+    override destroy() {
+        // Clean up polling interval
+        if (this.#intervalId !== null) {
+            clearInterval(this.#intervalId);
+            this.#intervalId = null;
+        }
+
+        // Clean up states
+        this.#time.destroy();
+        this.#date.destroy();
+        this.#polling.destroy();
+
+        super.destroy();
+    }
 }
 
 export default TimeManagementContext;
 
 export const TIME_MANAGEMENT_CONTEXT_TOKEN =
-    new UmbContextToken<TimeManagementContext>(TimeManagementContext.name);
+    new UmbContextToken<TimeManagementContext>('TimeDashboard.Context.TimeManagement');
 
 export const api = TimeManagementContext;

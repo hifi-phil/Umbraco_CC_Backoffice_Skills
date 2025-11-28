@@ -1,18 +1,18 @@
-import { EXAMPLE_COUNTER_CONTEXT } from '../context.js';
+import { BLUEPRINT_COUNTER_CONTEXT } from '../context.js';
 import { UmbTextStyles } from '@umbraco-cms/backoffice/style';
-import { css, html, customElement, state, LitElement } from '@umbraco-cms/backoffice/external/lit';
-import { UmbElementMixin } from '@umbraco-cms/backoffice/element-api';
+import { css, html, customElement, state } from '@umbraco-cms/backoffice/external/lit';
+import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 
-@customElement('another-counter-workspace-view')
-export class AnotherCounterWorkspaceView extends UmbElementMixin(LitElement) {
-	#counterContext?: typeof EXAMPLE_COUNTER_CONTEXT.TYPE;
+@customElement('blueprint-another-workspace-view')
+export class BlueprintAnotherWorkspaceView extends UmbLitElement {
+	#counterContext?: typeof BLUEPRINT_COUNTER_CONTEXT.TYPE;
 
 	@state()
-	private count = 0;
+	private _count = 0;
 
 	constructor() {
 		super();
-		this.consumeContext(EXAMPLE_COUNTER_CONTEXT, (instance) => {
+		this.consumeContext(BLUEPRINT_COUNTER_CONTEXT, (instance) => {
 			this.#counterContext = instance;
 			this.#observeCounter();
 		});
@@ -21,16 +21,16 @@ export class AnotherCounterWorkspaceView extends UmbElementMixin(LitElement) {
 	#observeCounter(): void {
 		if (!this.#counterContext) return;
 		this.observe(this.#counterContext.counter, (count) => {
-			this.count = count;
+			this._count = count;
 		});
 	}
 
 	override render() {
 		return html`
 			<uui-box class="uui-text">
-				<h1 class="uui-h2">Another Counter Example</h1>
-				<p class="uui-lead">Current count value: ${this.count}</p>
-				<p>This workspace view consumes the Counter Context and displays the current count.</p>
+				<h1 class="uui-h2">Another View</h1>
+				<p class="uui-lead">Current count value: ${this._count}</p>
+				<p>This is another workspace view that also consumes the Counter Context.</p>
 			</uui-box>
 		`;
 	}
@@ -46,10 +46,10 @@ export class AnotherCounterWorkspaceView extends UmbElementMixin(LitElement) {
 	];
 }
 
-export default AnotherCounterWorkspaceView;
+export default BlueprintAnotherWorkspaceView;
 
 declare global {
 	interface HTMLElementTagNameMap {
-		'another-counter-workspace-view': AnotherCounterWorkspaceView;
+		'blueprint-another-workspace-view': BlueprintAnotherWorkspaceView;
 	}
 }

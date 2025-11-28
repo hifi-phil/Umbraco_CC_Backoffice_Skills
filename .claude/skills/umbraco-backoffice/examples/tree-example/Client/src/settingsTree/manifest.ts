@@ -5,52 +5,50 @@ import {
 
 const repositoryManifest: UmbExtensionManifest = {
   type: "repository",
-  alias: "Our.Tree.Repository",
-  name: "UmbRepositorySettings",
+  alias: "OurTree.Repository",
+  name: "OurTree Repository",
   api: () => import("./ourtree.repository.js"),
 };
 
 const storeManifest: UmbExtensionManifest = {
   type: "treeStore",
-  alias: "Our.Tree.Store",
-  name: "UmbTreeSettingsStore",
+  alias: "OurTree.Store",
+  name: "OurTree Store",
   api: () => import("./ourtree.store.js"),
 };
 
 const treeManifest: UmbExtensionManifest = {
   type: "tree",
   kind: "default",
-  alias: "Our.Tree.Tree",
-  name: "UmbTreeSettings",
+  alias: "OurTree.Tree",
+  name: "OurTree Tree",
   meta: {
     repositoryAlias: repositoryManifest.alias,
   },
 };
 
-const treeItem = {
+const treeItemManifest: UmbExtensionManifest = {
   type: "treeItem",
   kind: "default",
-  alias: "Our.Tree.Item",
-  name: "UmbTreeSettingsItem",
+  alias: "OurTree.TreeItem",
+  name: "OurTree Tree Item",
   forEntityTypes: [OUR_TREE_ROOT_ENTITY_TYPE, OUR_TREE_ITEM_ENTITY_TYPE],
 };
 
 const menuManifest: UmbExtensionManifest = {
   type: "menu",
-  alias: "Our.Tree.Menu",
-  name: "Our Tree Menu",
+  alias: "OurTree.Menu",
+  name: "OurTree Menu",
   meta: {
     label: "Our Tree",
-    icon: "icon-bug",
-    entityType: OUR_TREE_ROOT_ENTITY_TYPE,
   },
 };
 
-const menuitemManifest: UmbExtensionManifest = {
+const menuItemManifest: UmbExtensionManifest = {
   type: "menuItem",
   kind: "tree",
-  alias: "Our.Tree.MenuItem",
-  name: "Our Tree Menu Item",
+  alias: "OurTree.MenuItem",
+  name: "OurTree Menu Item",
   weight: 100,
   meta: {
     label: "Our Tree",
@@ -65,8 +63,8 @@ const menuitemManifest: UmbExtensionManifest = {
 const sidebarManifest: UmbExtensionManifest = {
   type: "sectionSidebarApp",
   kind: "menu",
-  alias: "Our.Tree.Sidebar",
-  name: "Our Tree",
+  alias: "OurTree.SidebarApp",
+  name: "OurTree Sidebar App",
   weight: 100,
   meta: {
     label: "Our Tree",
@@ -84,8 +82,8 @@ export const manifests: Array<UmbExtensionManifest> = [
   repositoryManifest,
   treeManifest,
   storeManifest,
-  treeItem,
+  treeItemManifest,
   menuManifest,
-  menuitemManifest,
+  menuItemManifest,
   sidebarManifest,
 ];

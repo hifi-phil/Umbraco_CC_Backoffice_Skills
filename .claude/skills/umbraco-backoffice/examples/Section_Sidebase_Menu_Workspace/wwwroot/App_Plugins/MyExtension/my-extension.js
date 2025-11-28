@@ -1,12 +1,12 @@
 import { UMB_WORKSPACE_CONDITION_ALIAS as n } from "@umbraco-cms/backoffice/workspace";
-const a = [
+const i = [
   {
     name: "Blueprint Entrypoint",
     alias: "Blueprint.Entrypoint",
     type: "backofficeEntryPoint",
     js: () => import("./entrypoint-CWUPkU2h.js")
   }
-], i = [
+], a = [
   {
     name: "Blueprint Dashboard",
     alias: "Blueprint.Dashboard",
@@ -43,7 +43,7 @@ const a = [
     // Links to workspace via entityType
     menus: ["Blueprint.Menu"]
   }
-}, m = {
+}, p = {
   type: "sectionSidebarApp",
   kind: "menuWithEntityActions",
   alias: "Blueprint.SidebarApp",
@@ -58,7 +58,7 @@ const a = [
       match: t
     }
   ]
-}, p = [
+}, r = [
   // Section - appears in top navigation
   {
     type: "section",
@@ -70,7 +70,7 @@ const a = [
       pathname: "blueprint"
     }
   },
-  m,
+  p,
   o,
   s
 ], e = "Blueprint.Workspace", l = [
@@ -78,7 +78,7 @@ const a = [
     type: "workspace",
     alias: e,
     name: "Blueprint Workspace",
-    element: () => import("./workspace.element-BcQCVxYA.js"),
+    element: () => import("./workspace.element-Cqpx0ovr.js"),
     meta: {
       // entityType links this workspace to menu items with the same entityType
       entityType: "blueprint-entity"
@@ -86,14 +86,14 @@ const a = [
   },
   {
     type: "workspaceView",
-    alias: "time.workspace.another",
-    name: "default view",
-    js: () => import("./anotherWorkspace.element-BUvos9ks.js"),
-    weight: 300,
+    alias: "Blueprint.WorkspaceView.Another",
+    name: "Blueprint Another View",
+    element: () => import("./anotherWorkspace.element-B0DRQqxJ.js"),
+    weight: 200,
     meta: {
-      icon: "icon-alarm-clock",
+      icon: "icon-document",
       pathname: "another",
-      label: "another"
+      label: "Another"
     },
     conditions: [
       {
@@ -104,14 +104,14 @@ const a = [
   },
   {
     type: "workspaceView",
-    alias: "time.workspace.default",
-    name: "default view",
-    js: () => import("./defaultWorkspace.element-C5tNWBBf.js"),
-    weight: 300,
+    alias: "Blueprint.WorkspaceView.Counter",
+    name: "Blueprint Counter View",
+    element: () => import("./defaultWorkspace.element-W324JCLt.js"),
+    weight: 100,
     meta: {
-      icon: "icon-alarm-clock",
-      pathname: "overview",
-      label: "time"
+      icon: "icon-calculator",
+      pathname: "counter",
+      label: "Counter"
     },
     conditions: [
       {
@@ -122,20 +122,20 @@ const a = [
   },
   {
     type: "workspaceContext",
-    name: "Example Counter Workspace Context",
-    alias: "example.workspaceContext.counter",
-    api: () => import("./context-CsyCCYx7.js"),
+    name: "Blueprint Counter Workspace Context",
+    alias: "Blueprint.WorkspaceContext.Counter",
+    api: () => import("./context-BmX0kVnC.js"),
     conditions: [
       {
         alias: n,
-        match: "Umb.Workspace.Document"
+        match: e
       }
     ]
   }
 ], c = [
-  ...a,
   ...i,
-  ...p,
+  ...a,
+  ...r,
   ...l
 ];
 export {

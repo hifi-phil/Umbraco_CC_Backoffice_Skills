@@ -1,100 +1,88 @@
-import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
-import { LitElement, html, css, customElement, property } from "@umbraco-cms/backoffice/external/lit";
-import TimeManagementContext, { TIME_MANAGEMENT_CONTEXT_TOKEN } from "../contexts/time.context.js";
+import { html, css, customElement, state } from "@umbraco-cms/backoffice/external/lit";
+import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
+import type { TimeManagementContext } from "../contexts/time.context.js";
+import { TIME_MANAGEMENT_CONTEXT_TOKEN } from "../contexts/time.context.js";
 
-@customElement('timedashboard-dashboard')
-export class TimeDashboardDashboard extends UmbElementMixin(LitElement) {
+@customElement('time-dashboard-element')
+export class TimeDashboardElement extends UmbLitElement {
 
     #timeContext?: TimeManagementContext;
 
-    @property({ type: String })
-    time?: string;
+    @state()
+    private _time?: string;
 
-    @property({ type: String })
-    date?: string;
+    @state()
+    private _date?: string;
 
-    @property({ type: Boolean })
-    isPolling: boolean = false;
+    @state()
+    private _isPolling = false;
 
     constructor() {
         super();
 
-        this.consumeContext(TIME_MANAGEMENT_CONTEXT_TOKEN, (_instance) => {
-            if (!_instance) return;
-            this.#timeContext = _instance;
+        this.consumeContext(TIME_MANAGEMENT_CONTEXT_TOKEN, (instance) => {
+            if (!instance) return;
+            this.#timeContext = instance;
 
-            this.observe(_instance.time, (_time) => {
-                this.time = _time;
+            // Initial data fetch
+            instance.getDateAndTime();
+
+            this.observe(instance.time, (time) => {
+                this._time = time;
             });
 
-            this.observe(_instance.date, (_date) => {
-                this.date = _date;
+            this.observe(instance.date, (date) => {
+                this._date = date;
             });
 
-            this.observe(_instance.polling, (_polling) => {
-                this.isPolling = _polling;
-            })
+            this.observe(instance.polling, (polling) => {
+                this._isPolling = polling;
+            });
         });
     }
 
-    connectedCallback(): void {
-        super.connectedCallback();
-
-        if (this.#timeContext != null) {
-            this.#timeContext.getDateAndTime();
-            this.#timeContext.togglePolling();
-        }
-    }
-
-    @property()
-    title = '';
-
-    @property()
-    description = 'Show the time the server thinks it is.'
-
-    async getTime() {
+    #handleGetTime = async () => {
         await this.#timeContext?.getTime();
-    }
+    };
 
-    async getDate() {
+    #handleGetDate = async () => {
         await this.#timeContext?.getDate();
-    }
+    };
 
-    toggle() {
-        console.log('toggle');
+    #handleToggle = () => {
         this.#timeContext?.togglePolling();
-    }
+    };
 
-    render() {
+    override render() {
         return html`
             <uui-box headline="${this.localize.term('time_name')}">
                 <div slot="header">
                     <umb-localize key="time_description"></umb-localize>
                 </div>
                 <div class="time-box">
-                  <h2>${this.time}</h2>
+                  <h2>${this._time}</h2>
                   <uui-button
-                    .disabled=${this.isPolling}
-                    @click=${this.getTime} look="primary" color="positive" label="get time"></uui-button>
+                    .disabled=${this._isPolling}
+                    @click=${this.#handleGetTime} look="primary" color="positive" label="get time"></uui-button>
                 </div>
 
                 <div class="time-box">
-                  <h2>${this.date}</h2>
+                  <h2>${this._date}</h2>
                   <uui-button
-                    .disabled=${this.isPolling}
-                    @click=${this.getDate} look="primary" color="default" label="get date"></uui-button>
+                    .disabled=${this._isPolling}
+                    @click=${this.#handleGetDate} look="primary" color="default" label="get date"></uui-button>
                 </div>
 
                 <div>
                     <uui-toggle label="update"
-                        .checked="${this.isPolling || false}"
-                        @change=${this.toggle}>automatically update</uui-toggle>
+                        .checked="${this._isPolling}"
+                        @change=${this.#handleToggle}>automatically update</uui-toggle>
                 </div>
             </uui-box>
-        `
+        `;
     }
 
-    static styles = css`
+    static override styles = css`
         :host {
             display: block;
             padding: 20px;
@@ -105,13 +93,13 @@ export class TimeDashboardDashboard extends UmbElementMixin(LitElement) {
             margin-bottom: 10px;
             justify-content: space-between;
         }
-    `
+    `;
 }
 
-export default TimeDashboardDashboard;
+export default TimeDashboardElement;
 
 declare global {
-    interface HtmlElementTagNameMap {
-        'timedashboard-dashboard': TimeDashboardDashboard
+    interface HTMLElementTagNameMap {
+        'time-dashboard-element': TimeDashboardElement;
     }
 }

@@ -1,13 +1,15 @@
 import { OUR_TREE_ITEM_ENTITY_TYPE } from "../settingsTree/types.js";
 import { OUR_TREE_WORKSPACE_CONTEXT } from "./ourtree-workspace.context-token.js";
+import { OUR_TREE_WORKSPACE_ALIAS } from "./manifest.js";
 import { OurTreeWorkspaceEditorElement } from "./ourtree-workspace-editor.element.js";
 import { UmbWorkspaceRouteManager } from "@umbraco-cms/backoffice/workspace";
 import { UmbStringState } from "@umbraco-cms/backoffice/observable-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { UmbContextBase } from "@umbraco-cms/backoffice/class-api";
 
-export const OUR_TREE_WORKSPACE_ALIAS = "Our.Tree.Workspace";
-
+/**
+ * Workspace context for managing OurTree item editing.
+ */
 export class OurTreeWorkspaceContext extends UmbContextBase {
   public readonly workspaceAlias = OUR_TREE_WORKSPACE_ALIAS;
 
@@ -52,7 +54,7 @@ export class OurTreeWorkspaceContext extends UmbContextBase {
     return OUR_TREE_ITEM_ENTITY_TYPE;
   }
 
-  public override destroy(): void {
+  override destroy() {
     this.#unique.destroy();
     this.#name.destroy();
     this.#icon.destroy();

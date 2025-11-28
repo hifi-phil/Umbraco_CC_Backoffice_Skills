@@ -15,14 +15,14 @@ export const manifests: Array<UmbExtensionManifest> = [
   },
   {
     type: 'workspaceView',
-    alias: 'time.workspace.another',
-    name: 'default view',
-    js: () => import('./views/anotherWorkspace.element.js'),
-    weight: 300,
+    alias: 'Blueprint.WorkspaceView.Another',
+    name: 'Blueprint Another View',
+    element: () => import('./views/anotherWorkspace.element.js'),
+    weight: 200,
     meta: {
-      icon: 'icon-alarm-clock',
+      icon: 'icon-document',
       pathname: 'another',
-      label: 'another'
+      label: 'Another'
     },
     conditions: [
       {
@@ -33,14 +33,14 @@ export const manifests: Array<UmbExtensionManifest> = [
   },
   {
     type: 'workspaceView',
-    alias: 'time.workspace.default',
-    name: 'default view',
-    js: () => import('./views/defaultWorkspace.element.js'),
-    weight: 300,
+    alias: 'Blueprint.WorkspaceView.Counter',
+    name: 'Blueprint Counter View',
+    element: () => import('./views/defaultWorkspace.element.js'),
+    weight: 100,
     meta: {
-      icon: 'icon-alarm-clock',
-      pathname: 'overview',
-      label: 'time'
+      icon: 'icon-calculator',
+      pathname: 'counter',
+      label: 'Counter'
     },
     conditions: [
       {
@@ -51,13 +51,13 @@ export const manifests: Array<UmbExtensionManifest> = [
   },
   {
     type: 'workspaceContext',
-    name: 'Example Counter Workspace Context',
-    alias: 'example.workspaceContext.counter',
+    name: 'Blueprint Counter Workspace Context',
+    alias: 'Blueprint.WorkspaceContext.Counter',
     api: () => import('./context.js'),
     conditions: [
       {
         alias: UMB_WORKSPACE_CONDITION_ALIAS,
-        match: 'Umb.Workspace.Document',
+        match: workspaceAlias,
       },
     ]
   }

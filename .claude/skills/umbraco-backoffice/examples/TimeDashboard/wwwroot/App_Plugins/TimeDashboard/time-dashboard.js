@@ -1,7 +1,7 @@
 import { UMB_WORKSPACE_CONDITION_ALIAS as m, UmbWorkspaceActionBase as l } from "@umbraco-cms/backoffice/workspace";
 import { UMB_NOTIFICATION_CONTEXT as n } from "@umbraco-cms/backoffice/notification";
-import { UMB_DOCUMENT_DETAIL_REPOSITORY_ALIAS as c, UMB_DOCUMENT_ENTITY_TYPE as p } from "@umbraco-cms/backoffice/document";
-import { UmbEntityActionBase as r } from "@umbraco-cms/backoffice/entity-action";
+import { UMB_DOCUMENT_DETAIL_REPOSITORY_ALIAS as c, UMB_DOCUMENT_ENTITY_TYPE as r } from "@umbraco-cms/backoffice/document";
+import { UmbEntityActionBase as p } from "@umbraco-cms/backoffice/entity-action";
 const d = [
   {
     name: "Time Dashboard Entrypoint",
@@ -14,115 +14,115 @@ const d = [
     type: "globalContext",
     alias: "time.context",
     name: "Time context",
-    api: () => import("./time.context-DShPQY3b.js")
+    api: () => import("./time.context-BIJ1IR8X.js")
   }
-], y = [
+], b = [
   {
     type: "section",
-    alias: "time.section",
-    name: "time section",
+    alias: "TimeDashboard.Section.Main",
+    name: "TimeDashboard Section",
     weight: 10,
     meta: {
       label: "Time",
       pathname: "time"
     }
   }
-], b = {
+], y = {
   type: "sectionSidebarApp",
   kind: "menuWithEntityActions",
-  alias: "time.sidebar.app",
-  name: "Sidebar app",
+  alias: "TimeDashboard.SidebarApp",
+  name: "TimeDashboard Sidebar App",
   meta: {
     label: "Time",
-    menu: "time.nested.menu"
+    menu: "TimeDashboard.Menu.Nested"
   },
   conditions: [
     {
       alias: "Umb.Condition.SectionAlias",
-      match: "time.section"
+      match: "TimeDashboard.Section.Main"
     }
   ]
-}, u = {
+}, T = {
   type: "menu",
-  alias: "time.menu",
-  name: "time sidebar menu",
+  alias: "TimeDashboard.Menu.Main",
+  name: "TimeDashboard Sidebar Menu",
   meta: {
-    label: "time"
+    label: "Time"
   }
-}, w = {
+}, u = {
   type: "menuItem",
-  alias: "time.menu.item",
-  name: "time menu item",
+  alias: "TimeDashboard.MenuItem.TimeZones",
+  name: "TimeDashboard Time Zones Menu Item",
   meta: {
     label: "Time zones",
     icon: "icon-alarm-clock",
     entityType: "time-workspace",
     menus: [
-      "time.menu"
+      "TimeDashboard.Menu.Main"
     ]
   },
   element: () => import("./nested-menu.element-BKrWPEgz.js")
 }, o = {
   type: "menu",
-  alias: "time.nested.menu",
-  name: "Nested menu",
+  alias: "TimeDashboard.Menu.Nested",
+  name: "TimeDashboard Nested Menu",
   element: () => import("./nested-menu.element-BKrWPEgz.js"),
   meta: {
     label: "Time zones",
     icon: "icon-alarm-clock",
     entityType: "time-workspace"
   }
-}, k = [
+}, w = [
   {
     type: "time-menu-item",
-    alias: "time.nested.menu.child-one",
-    name: "child item",
+    alias: "TimeDashboard.MenuItem.Child1",
+    name: "TimeDashboard Child Item 1",
     weight: 200,
     meta: {
       menus: [o.alias],
       icon: "icon-alarm-clock",
-      label: "child item 1",
+      label: "Child Item 1",
       entityType: "time-workspace"
     }
   },
   {
     type: "time-menu-item",
-    alias: "time.nested.menu.child-two",
-    name: "child item two",
+    alias: "TimeDashboard.MenuItem.Child2",
+    name: "TimeDashboard Child Item 2",
     weight: 200,
     meta: {
       menus: [o.alias],
       icon: "icon-alarm-clock",
-      label: "child item 2",
+      label: "Child Item 2",
       entityType: "time-workspace"
     }
   }
-], g = [
-  b,
+], k = [
+  y,
+  T,
   u,
-  w,
   o,
-  ...k
-], x = [
+  ...w
+], g = [
   {
     type: "dashboard",
-    name: "timedashboard",
-    alias: "timedashboard.dashboard",
-    elementName: "timedashboard-dashboard",
-    js: () => import("./dashboard.element-BNDeE0Da.js"),
+    name: "TimeDashboard Dashboard",
+    alias: "TimeDashboard.Dashboard.Main",
+    elementName: "time-dashboard-element",
+    element: () => import("./dashboard.element-DKo0xYIX.js"),
     weight: -10,
     meta: {
-      label: "TimeDashboard",
-      pathname: "timedashboard"
+      label: "Time Dashboard",
+      pathname: "time-dashboard"
     },
     conditions: [
       {
         alias: "Umb.Condition.SectionAlias",
-        match: "time.section"
+        match: "TimeDashboard.Section.Main"
       }
     ]
   }
-], e = "time.workspace", f = [
+], e = "time.workspace", A = [
   {
     type: "workspaceContext",
     alias: "time.workspace.context",
@@ -198,7 +198,7 @@ const d = [
       }
     ]
   }
-], A = [
+], x = [
   {
     type: "headerApp",
     alias: "time.header.app",
@@ -217,14 +217,14 @@ const d = [
     name: "time header modal",
     js: () => import("./time-header-modal-PDNRHjor.js")
   }
-], T = [
+], f = [
   {
     type: "modal",
     alias: "time.custom.modal",
     name: "Time custom modal",
     js: () => import("./custom-modal-element-D9nt2jeQ.js")
   }
-], U = [
+], D = [
   {
     type: "propertyEditorSchema",
     name: "Styled textbox",
@@ -254,7 +254,7 @@ border:none; border-bottom: 1px solid #444;`
     type: "propertyEditorUi",
     alias: "styled.textbox.ui",
     name: "styled textbox",
-    js: () => import("./styledtext.ui.element-JMsx80EV.js"),
+    js: () => import("./styledtext.ui.element-B8Wd4CK3.js"),
     elementName: "styled-text",
     meta: {
       label: "Styled textbox",
@@ -263,7 +263,7 @@ border:none; border-bottom: 1px solid #444;`
       propertyEditorSchemaAlias: "styled.textbox"
     }
   }
-], E = [
+], M = [
   {
     type: "workspaceView",
     alias: "time.document.workspace",
@@ -285,21 +285,21 @@ border:none; border-bottom: 1px solid #444;`
 ];
 class C extends l {
   #e;
-  constructor(t, i) {
-    super(t, i), this.consumeContext(n, (a) => {
-      this.#e = a;
+  constructor(t, a) {
+    super(t, a), this.consumeContext(n, (i) => {
+      this.#e = i;
     });
   }
   async execute() {
-    console.log("action execute"), this.#e?.peek("warning", {
+    this.#e?.peek("warning", {
       data: {
-        headline: "A thing has happened !",
-        message: "What that thing is? only time will tell."
+        headline: "A thing has happened!",
+        message: "What that thing is? Only time will tell."
       }
     });
   }
 }
-const S = [
+const U = [
   {
     type: "workspaceAction",
     alias: "time.workspace.action",
@@ -318,11 +318,11 @@ const S = [
     ]
   }
 ];
-class I extends r {
+class E extends p {
   #e;
-  constructor(t, i) {
-    super(t, i), this.consumeContext(n, (a) => {
-      this.#e = a;
+  constructor(t, a) {
+    super(t, a), this.consumeContext(n, (i) => {
+      this.#e = i;
     });
   }
   async execute() {
@@ -334,23 +334,23 @@ class I extends r {
     });
   }
 }
-const $ = [
+const S = [
   {
     type: "entityAction",
     alias: "time.entity.action",
     name: "tell me the time action",
     weight: -100,
     forEntityTypes: [
-      p
+      r
     ],
-    api: I,
+    api: E,
     meta: {
       icon: "icon-alarm-clock",
       label: "time action",
       repositoryAlias: c
     }
   }
-], j = [
+], I = [
   {
     type: "localization",
     alias: "time.lang.enus",
@@ -371,22 +371,22 @@ const $ = [
     },
     js: () => import("./en-gb-D3ueGTry.js")
   }
-], N = [
+], j = [
   ...d,
   ...h,
-  ...y,
+  ...b,
+  ...k,
   ...g,
+  ...A,
   ...x,
   ...f,
-  ...A,
-  ...T,
+  ...D,
+  ...M,
   ...U,
-  ...E,
   ...S,
-  ...$,
-  ...j
+  ...I
 ];
 export {
-  N as manifests
+  j as manifests
 };
 //# sourceMappingURL=time-dashboard.js.map
