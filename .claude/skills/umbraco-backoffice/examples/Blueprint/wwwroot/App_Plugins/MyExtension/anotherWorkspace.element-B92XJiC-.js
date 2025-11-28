@@ -1,4 +1,4 @@
-import { BLUEPRINT_COUNTER_CONTEXT as d } from "./context-BmX0kVnC.js";
+import { B as d } from "./context-token-ClgMrqlf.js";
 import { UmbTextStyles as w } from "@umbraco-cms/backoffice/style";
 import { html as m, css as C, state as x, customElement as y } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement as E } from "@umbraco-cms/backoffice/lit-element";
@@ -52,4 +52,4 @@ export {
   i as BlueprintAnotherWorkspaceView,
   U as default
 };
-//# sourceMappingURL=anotherWorkspace.element-B0DRQqxJ.js.map
+//# sourceMappingURL=anotherWorkspace.element-B92XJiC-.js.map

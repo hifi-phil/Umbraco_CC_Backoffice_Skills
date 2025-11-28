@@ -88,7 +88,7 @@ const i = [
     type: "workspaceView",
     alias: "Blueprint.WorkspaceView.Another",
     name: "Blueprint Another View",
-    element: () => import("./anotherWorkspace.element-B0DRQqxJ.js"),
+    element: () => import("./anotherWorkspace.element-B92XJiC-.js"),
     weight: 200,
     meta: {
       icon: "icon-document",
@@ -106,7 +106,7 @@ const i = [
     type: "workspaceView",
     alias: "Blueprint.WorkspaceView.Counter",
     name: "Blueprint Counter View",
-    element: () => import("./defaultWorkspace.element-W324JCLt.js"),
+    element: () => import("./defaultWorkspace.element-Dj1vi3Oe.js"),
     weight: 100,
     meta: {
       icon: "icon-calculator",
@@ -124,7 +124,7 @@ const i = [
     type: "workspaceContext",
     name: "Blueprint Counter Workspace Context",
     alias: "Blueprint.WorkspaceContext.Counter",
-    api: () => import("./context-BmX0kVnC.js"),
+    api: () => import("./context-CQWPbpYh.js"),
     conditions: [
       {
         alias: n,

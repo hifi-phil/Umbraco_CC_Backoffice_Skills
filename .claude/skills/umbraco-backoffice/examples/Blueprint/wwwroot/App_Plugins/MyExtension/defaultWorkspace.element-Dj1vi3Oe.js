@@ -1,4 +1,4 @@
-import { BLUEPRINT_COUNTER_CONTEXT as C } from "./context-BmX0kVnC.js";
+import { B as C } from "./context-token-ClgMrqlf.js";
 import { UmbTextStyles as w } from "@umbraco-cms/backoffice/style";
 import { html as k, css as x, state as y, customElement as E } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement as W } from "@umbraco-cms/backoffice/lit-element";
@@ -8,7 +8,7 @@ var T = Object.defineProperty, O = Object.getOwnPropertyDescriptor, d = (t) => {
   for (var s = n > 1 ? void 0 : n ? O(e, r) : e, c = t.length - 1, p; c >= 0; c--)
     (p = t[c]) && (s = (n ? p(e, r, s) : p(s)) || s);
   return n && s && T(e, r, s), s;
-}, v = (t, e, r) => e.has(t) || d("Cannot " + r), a = (t, e, r) => (v(t, e, "read from private field"), r ? r.call(t) : e.get(t)), u = (t, e, r) => e.has(t) ? d("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(t) : e.set(t, r), b = (t, e, r, n) => (v(t, e, "write to private field"), e.set(t, r), r), P = (t, e, r) => (v(t, e, "access private method"), r), i, l, m, h, _;
+}, v = (t, e, r) => e.has(t) || d("Cannot " + r), a = (t, e, r) => (v(t, e, "read from private field"), r ? r.call(t) : e.get(t)), u = (t, e, r) => e.has(t) ? d("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(t) : e.set(t, r), b = (t, e, r, n) => (v(t, e, "write to private field"), e.set(t, r), r), B = (t, e, r) => (v(t, e, "access private method"), r), i, l, m, h, _;
 let o = class extends W {
   constructor() {
     super(), u(this, l), u(this, i), this._count = 0, u(this, h, () => {
@@ -16,7 +16,7 @@ let o = class extends W {
     }), u(this, _, () => {
       a(this, i)?.reset();
     }), this.consumeContext(C, (t) => {
-      b(this, i, t), P(this, l, m).call(this);
+      b(this, i, t), B(this, l, m).call(this);
     });
   }
   render() {
@@ -67,4 +67,4 @@ export {
   o as BlueprintCounterWorkspaceView,
   U as default
 };
-//# sourceMappingURL=defaultWorkspace.element-W324JCLt.js.map
+//# sourceMappingURL=defaultWorkspace.element-Dj1vi3Oe.js.map

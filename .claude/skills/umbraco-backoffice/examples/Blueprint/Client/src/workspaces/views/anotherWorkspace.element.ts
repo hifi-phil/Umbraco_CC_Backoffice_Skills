@@ -1,4 +1,4 @@
-import { BLUEPRINT_COUNTER_CONTEXT } from '../context.js';
+import { BLUEPRINT_COUNTER_CONTEXT } from '../context-token.js';
 import { UmbTextStyles } from '@umbraco-cms/backoffice/style';
 import { css, html, customElement, state } from '@umbraco-cms/backoffice/external/lit';
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';

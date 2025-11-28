@@ -131,6 +131,53 @@ interface HealthCheckResultResponseModel {
 }
 ```
 
+## Backend C# Health Check
+
+Health checks can also be implemented as C# classes that are auto-discovered by Umbraco.
+
+```csharp
+using Umbraco.Cms.Core.HealthChecks;
+
+namespace MyPackage.HealthChecks;
+
+[HealthCheck(
+    "12345678-1234-1234-1234-123456789012",
+    "My Custom Check",
+    Description = "Verifies custom services are running",
+    Group = "Custom")]
+public class MyHealthCheck : HealthCheck
+{
+    public MyHealthCheck(HealthCheckContext context) : base(context) { }
+
+    public override Task<IEnumerable<HealthCheckStatus>> GetStatus()
+    {
+        var isHealthy = CheckMyService();
+        var status = new HealthCheckStatus(isHealthy ? "Service running" : "Service down")
+        {
+            ResultType = isHealthy ? StatusResultType.Success : StatusResultType.Error,
+            Actions = isHealthy ? null : new List<HealthCheckAction>
+            {
+                new("restart", Id) { Name = "Restart Service" }
+            }
+        };
+        return Task.FromResult<IEnumerable<HealthCheckStatus>>(new[] { status });
+    }
+
+    public override HealthCheckStatus ExecuteAction(HealthCheckAction action)
+    {
+        if (action.Alias == "restart")
+        {
+            RestartMyService();
+            return new HealthCheckStatus("Restarted") { ResultType = StatusResultType.Success };
+        }
+        throw new InvalidOperationException("Unknown action");
+    }
+
+    private bool CheckMyService() => true;
+    private void RestartMyService() { }
+}
+```
+
 ## Best Practices
 
 - Return clear, actionable messages
