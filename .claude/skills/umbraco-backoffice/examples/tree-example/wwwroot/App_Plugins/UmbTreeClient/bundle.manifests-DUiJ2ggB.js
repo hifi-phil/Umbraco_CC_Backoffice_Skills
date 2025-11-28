@@ -1,34 +1,35 @@
-const r = [
+import { UMB_WORKSPACE_CONDITION_ALIAS as s } from "@umbraco-cms/backoffice/workspace";
+const o = [
   {
     name: "Umb Tree Client Entrypoint",
     alias: "UmbTreeClient.Entrypoint",
     type: "backofficeEntryPoint",
     js: () => import("./entrypoint-BIGpY6pM.js")
   }
-], e = "our-tree-root", a = "our-tree-item", i = {
+], e = "our-tree-root", i = "our-tree-item", a = {
   type: "repository",
   alias: "Our.Tree.Repository",
   name: "UmbRepositorySettings",
-  api: () => import("./ourtree.repository-Bok29J5f.js")
-}, s = {
+  api: () => import("./ourtree.repository-CncOQmFe.js")
+}, m = {
   type: "treeStore",
   alias: "Our.Tree.Store",
   name: "UmbTreeSettingsStore",
   api: () => import("./ourtree.store-CiK112rZ.js")
-}, n = {
+}, r = {
   type: "tree",
   kind: "default",
   alias: "Our.Tree.Tree",
   name: "UmbTreeSettings",
   meta: {
-    repositoryAlias: i.alias
+    repositoryAlias: a.alias
   }
-}, o = {
+}, p = {
   type: "treeItem",
   kind: "default",
   alias: "Our.Tree.Item",
   name: "UmbTreeSettingsItem",
-  forEntityTypes: [e, a]
+  forEntityTypes: [e, i]
 }, t = {
   type: "menu",
   alias: "Our.Tree.Menu",
@@ -38,7 +39,7 @@ const r = [
     icon: "icon-bug",
     entityType: e
   }
-}, m = {
+}, T = {
   type: "menuItem",
   kind: "tree",
   alias: "Our.Tree.MenuItem",
@@ -49,10 +50,10 @@ const r = [
     icon: "icon-bug",
     entityType: e,
     menus: [t.alias],
-    treeAlias: n.alias,
+    treeAlias: r.alias,
     hideTreeRoot: !0
   }
-}, T = {
+}, c = {
   type: "sectionSidebarApp",
   kind: "menu",
   alias: "Our.Tree.Sidebar",
@@ -68,18 +69,51 @@ const r = [
       match: "Umb.Section.Settings"
     }
   ]
-}, u = [
-  i,
-  n,
-  s,
-  o,
-  t,
+}, l = [
+  a,
+  r,
   m,
-  T
-], l = [...r, ...u];
+  p,
+  t,
+  T,
+  c
+], n = "Our.Tree.Workspace", u = {
+  type: "workspace",
+  kind: "routable",
+  alias: n,
+  name: "Our Tree Item Workspace",
+  api: () => import("./ourtree-workspace.context-BUHte_sK.js"),
+  meta: {
+    entityType: i
+  }
+}, O = {
+  type: "workspaceView",
+  alias: "Our.Tree.WorkspaceView.Details",
+  name: "Our Tree Item Workspace Details View",
+  js: () => import("./ourtree-workspace-view.element-DarGI6E9.js"),
+  weight: 100,
+  meta: {
+    label: "Details",
+    pathname: "details",
+    icon: "icon-info"
+  },
+  conditions: [
+    {
+      alias: s,
+      match: n
+    }
+  ]
+}, y = [
+  u,
+  O
+], f = [
+  ...o,
+  ...l,
+  ...y
+];
 export {
-  a as O,
+  i as O,
   e as a,
-  l as m
+  f as m
 };
-//# sourceMappingURL=bundle.manifests-qdZZy2P2.js.map
+//# sourceMappingURL=bundle.manifests-DUiJ2ggB.js.map
