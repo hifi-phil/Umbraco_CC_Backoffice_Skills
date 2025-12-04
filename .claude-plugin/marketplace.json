@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Umbraco backoffice customization skills for Claude Code",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "homepage": "https://github.com/hifi-phil/UmbracoCMS_Skills"
   },
   "plugins": [
@@ -14,7 +14,7 @@
       "name": "umbraco-backoffice-skills",
       "source": "./plugins/umbraco-backoffice-skills",
       "description": "57 skills for Umbraco backoffice customization covering Foundation, Extension Types, Property Editors, Rich Text, Backend, and Setup",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "category": "development",
       "author": {
         "name": "Phil W",
@@ -29,7 +29,9 @@
         "typescript",
         "lit",
         "web-components"
-      ]
+      ],
+      "agents": "./agents/",
+      "skills": "./skills/"
     }
   ]
 }
