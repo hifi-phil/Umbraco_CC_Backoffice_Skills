@@ -40,19 +40,25 @@ This covers:
 - Extension structure and `index.ts` requirements
 - Running with `npm run dev:external`
 
-### Add E2E Testing Dependencies
+### Add Testing Dependencies
 
-Once your extension is set up, add Playwright for E2E tests:
+Once your extension is set up, add dependencies for the complete testing pyramid:
 
 ```json
 {
   "devDependencies": {
-    "@playwright/test": "^1.56"
+    "@playwright/test": "^1.56",
+    "@open-wc/testing": "^4.0.0",
+    "@web/dev-server-esbuild": "^1.0.0",
+    "@web/dev-server-import-maps": "^0.2.0",
+    "@web/test-runner": "^0.18.0",
+    "@web/test-runner-playwright": "^0.11.0"
   },
   "scripts": {
-    "test:e2e": "playwright test",
-    "test:e2e:headed": "playwright test --headed",
-    "test:e2e:ui": "playwright test --ui"
+    "test": "web-test-runner",
+    "test:watch": "web-test-runner --watch",
+    "test:mocked": "playwright test --config=tests/playwright.config.ts",
+    "test:mocked:headed": "playwright test --config=tests/playwright.config.ts --headed"
   }
 }
 ```
@@ -66,11 +72,25 @@ npx playwright install chromium
 
 ```
 my-extension/
-├── index.ts                    # Exports manifests array
-├── my-element.ts               # Your element(s)
+├── index.ts                    # Entry point (exports manifests)
+├── src/
+│   ├── feature/
+│   │   ├── my-element.ts
+│   │   ├── my-element.test.ts  # Unit tests alongside source
+│   │   └── types.ts
+│   │   └── types.test.ts       # Unit tests for types
+│   └── __mocks__/              # Umbraco import mocks (for unit tests)
+│       ├── lit.js
+│       └── observable-api.js
+├── mock/                       # Mock repository (for mocked backoffice)
+│   ├── index.ts
+│   └── mock-repository.ts
+├── mocks/                      # MSW handlers (optional)
+│   └── handlers.ts
 ├── tests/
-│   ├── playwright.config.ts    # Playwright config
-│   └── my-extension.spec.ts    # E2E tests
+│   ├── playwright.config.ts    # Playwright config for mocked tests
+│   └── my-extension.spec.ts    # Mocked backoffice tests
+├── web-test-runner.config.mjs  # Unit test runner config
 ├── package.json
 └── tsconfig.json
 ```
@@ -239,7 +259,13 @@ See `workspace-feature-toggle` in the examples folder for a complete working exa
 ```bash
 # Start the mocked backoffice (in one terminal)
 cd /path/to/Umbraco-CMS/src/Umbraco.Web.UI.Client
-VITE_EXTERNAL_EXTENSION=/path/to/your/extension npm run dev:external
+
+# IMPORTANT: Paths must point to DIRECTORIES, not files
+# - VITE_EXTERNAL_EXTENSION: Directory containing index.ts (NOT vite.config.ts)
+# - VITE_EXTERNAL_MOCKS: Directory containing handlers.ts (NOT the file itself)
+VITE_EXTERNAL_EXTENSION=/path/to/your/extension \
+VITE_EXTERNAL_MOCKS=/path/to/your/extension/mocks \
+npm run dev:external
 
 # Run tests (in another terminal)
 cd /path/to/your/extension
@@ -247,6 +273,14 @@ npm run test:e2e                # Headless
 npm run test:e2e:headed         # With browser visible
 npm run test:e2e:ui             # Interactive UI mode
 ```
+
+### Common Path Mistakes
+
+| Wrong | Correct |
+|-------|---------|
+| `VITE_EXTERNAL_EXTENSION=.../vite.config.ts` | `VITE_EXTERNAL_EXTENSION=.../Client` |
+| `VITE_EXTERNAL_MOCKS=.../mocks/handlers.ts` | `VITE_EXTERNAL_MOCKS=.../mocks` |
+| `VITE_EXTERNAL_EXTENSION=.../src` | `VITE_EXTERNAL_EXTENSION=.../Client` (where index.ts is) |
 
 ---
 
@@ -280,6 +314,48 @@ Your extension's `node_modules` is being used instead of the main project's. The
 - Ensure Chromium is installed: `npx playwright install chromium`
 - Start the dev server before running tests
 - Add appropriate waits for elements to appear
+
+### Extension calls custom API endpoints
+
+If your extension calls custom C# backend APIs (not standard Umbraco APIs), MSW won't have handlers for them. Two approaches:
+
+- **[Mock Repository Pattern](patterns/mock-repository-pattern.md)** (Recommended) - Replace the API-calling repository with a mock version
+- **[External MSW Handlers](patterns/external-msw-handlers.md)** - Add MSW handlers for your custom endpoints
+
+## Two Mocking Approaches
+
+Extensions with custom APIs can use two mocking approaches:
+
+| Approach | Use Case | Best For |
+|----------|----------|----------|
+| **MSW Handlers** | Network-level API mocking | Testing error handling, loading states, retries |
+| **Mock Repository** | Application-level mocking | Testing UI with predictable data (recommended for hey-api) |
+
+### When to Use Each
+
+- **MSW Handlers**: Test network error handling, loading states, retries, timeout behaviour
+- **Mock Repository**: Test UI with predictable data, avoid cross-origin issues with hey-api clients
+
+### Example: tree-example Tests
+
+The `tree-example` demonstrates both approaches:
+
+```bash
+# Start mocked backoffice
+VITE_EXTERNAL_EXTENSION=/path/to/tree-example/Client \
+VITE_EXTERNAL_MOCKS=/path/to/tree-example/Client/mocks \
+npm run dev:external
+
+# Run MSW tests
+npm run test:mocked:msw      # 6 tests
+
+# Run mock repository tests
+npm run test:mocked:repo     # 6 tests
+```
+
+For real E2E testing against a running Umbraco instance, see **umbraco-e2e-testing**.
+
+---
 
 ## What's Mocked?
 

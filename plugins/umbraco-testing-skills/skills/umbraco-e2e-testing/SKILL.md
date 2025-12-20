@@ -10,6 +10,37 @@ allowed-tools: Read, Write, Edit, WebFetch
 
 End-to-end testing for Umbraco backoffice extensions using Playwright and `@umbraco/playwright-testhelpers`. This approach tests against a real running Umbraco instance, validating complete user workflows.
 
+## Critical: Always Use Testhelpers and Builders
+
+**NEVER write raw Playwright tests for Umbraco.** Always use:
+
+| Package | Purpose | Why Required |
+|---------|---------|--------------|
+| `@umbraco/playwright-testhelpers` | UI and API helpers | Handles Umbraco-specific selectors, auth, navigation |
+| `@umbraco/json-models-builders` | Test data builders | Creates valid Umbraco entities with correct structure |
+
+**Why?**
+- Umbraco uses `data-mark` instead of `data-testid` - testhelpers handle this
+- Auth token management is complex - testhelpers manage `STORAGE_STAGE_PATH`
+- API setup/teardown requires specific payload formats - builders ensure correctness
+- UI navigation has async loading patterns - helpers include proper waits
+- Selectors change between versions - testhelpers abstract these away
+
+```typescript
+// WRONG - Raw Playwright (brittle, breaks between versions)
+await page.goto('/umbraco');
+await page.fill('[name="email"]', 'admin@example.com');
+await page.click('button[type="submit"]');
+
+// CORRECT - Using testhelpers (stable, maintained)
+import { test } from '@umbraco/playwright-testhelpers';
+
+test('my test', async ({ umbracoApi, umbracoUi }) => {
+  await umbracoUi.goToBackOffice();
+  await umbracoUi.login.enterEmail('admin@example.com');
+});
+```
+
 ## When to Use
 
 - Testing complete user workflows
@@ -246,6 +277,41 @@ const dataType = await umbracoApi.dataType.getByName('Textstring');
 await umbracoApi.dataType.create('MyType', 'Umbraco.TextBox', 'Umb.PropertyEditorUi.TextBox', []);
 ```
 
+### Using Builders for Complex Data
+
+For complex test data, use `@umbraco/json-models-builders`:
+
+```typescript
+import { DocumentTypeBuilder, DocumentBuilder } from '@umbraco/json-models-builders';
+
+test('create complex document type', async ({ umbracoApi }) => {
+  // Build a document type with multiple properties
+  const docType = new DocumentTypeBuilder()
+    .withName('Article')
+    .withAlias('article')
+    .addGroup()
+      .withName('Content')
+      .addTextBoxProperty()
+        .withAlias('title')
+        .withLabel('Title')
+        .done()
+      .addRichTextProperty()
+        .withAlias('body')
+        .withLabel('Body')
+        .done()
+      .done()
+    .build();
+
+  await umbracoApi.documentType.create(docType);
+});
+```
+
+**Why use builders?**
+- Fluent API makes complex structures readable
+- Ensures valid payload structure for Umbraco API
+- Handles required fields and defaults
+- Type-safe in TypeScript
+
 ### UI Helpers (umbracoUi)
 
 **Navigation:**
@@ -254,6 +320,39 @@ await umbracoUi.goToBackOffice();
 await umbracoUi.content.goToSection(ConstantHelper.sections.content);
 await umbracoUi.content.goToContentWithName('My Page');
 ```
+
+### Testing Custom Trees in Sidebar
+
+When testing custom tree extensions (e.g., in Settings), use this pattern to handle async loading and scrolling:
+
+```typescript
+test('should click custom tree item', async ({ umbracoUi }) => {
+  await umbracoUi.goToBackOffice();
+  await umbracoUi.content.goToSection(ConstantHelper.sections.settings);
+
+  // 1. Wait for your tree heading (custom trees often at bottom of sidebar)
+  await umbracoUi.page.getByRole('heading', { name: 'My Tree' }).waitFor({ timeout: 15000 });
+
+  // 2. Scroll into view (important - sidebar may be long)
+  await umbracoUi.page.getByRole('heading', { name: 'My Tree' }).scrollIntoViewIfNeeded();
+
+  // 3. Wait for tree items to load (async from API)
+  const item1Link = umbracoUi.page.getByRole('link', { name: 'Item 1' });
+  await item1Link.waitFor({ timeout: 15000 });
+
+  // 4. Click the item
+  await item1Link.click();
+
+  // Assert workspace loads
+  await expect(umbracoUi.page.locator('my-tree-workspace-editor')).toBeVisible({ timeout: 15000 });
+});
+```
+
+**Why this pattern?**
+- Custom trees are often at the bottom of the Settings sidebar
+- Tree items load asynchronously from your API
+- Using `getByRole('link', { name: '...' })` is more reliable than generic `umb-tree-item` selectors
+- Built-in trees (Document Types, etc.) also use `umb-tree-item`, causing selector conflicts
 
 **Content Actions:**
 ```typescript
@@ -344,6 +443,25 @@ test('can publish content', async ({ umbracoApi, umbracoUi }) => {
   expect(contentData.variants[0].state).toBe('Published');
 });
 ```
+
+### Working Example: tree-example
+
+The `tree-example` demonstrates E2E testing for a custom tree extension:
+
+**Location**: `umbraco-backoffice/examples/tree-example/Client/`
+
+```bash
+# Run E2E tests (requires running Umbraco)
+URL=https://localhost:44325 \
+UMBRACO_USER_LOGIN=admin@example.com \
+UMBRACO_USER_PASSWORD=yourpassword \
+npm run test:e2e                # 7 tests
+```
+
+Key files:
+- `tests/playwright.e2e.config.ts` - E2E configuration with auth setup
+- `tests/auth.setup.ts` - Authentication using testhelpers
+- `tests/tree-e2e.spec.ts` - Tests for custom tree in Settings sidebar
 
 ---
 

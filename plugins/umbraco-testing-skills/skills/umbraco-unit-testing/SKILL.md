@@ -131,6 +131,124 @@ export default {
 
 **Common mistake**: Using `dist/packages` instead of `dist-cms` causes 404 errors.
 
+---
+
+## Alternative: Mock-Based Approach (Simpler)
+
+For simpler unit tests that don't need the full Umbraco context system, mock the Umbraco imports entirely. This approach:
+- Avoids complex import map configuration
+- Runs faster (no loading Umbraco packages)
+- Tests logic in true isolation
+- Works well for testing types, constants, and observable patterns
+
+### Simplified Configuration
+
+```javascript
+// web-test-runner.config.mjs
+import { esbuildPlugin } from '@web/dev-server-esbuild';
+import { importMapsPlugin } from '@web/dev-server-import-maps';
+import { playwrightLauncher } from '@web/test-runner-playwright';
+
+export default {
+  files: 'src/**/*.test.ts',
+  nodeResolve: true,
+  browsers: [playwrightLauncher({ product: 'chromium' })],
+  plugins: [
+    esbuildPlugin({ ts: true }),
+    importMapsPlugin({
+      inject: {
+        importMap: {
+          imports: {
+            // Map Umbraco imports to local mocks
+            '@umbraco-cms/backoffice/external/lit': '/src/__mocks__/lit.js',
+            '@umbraco-cms/backoffice/observable-api': '/src/__mocks__/observable-api.js',
+            '@umbraco-cms/backoffice/class-api': '/src/__mocks__/class-api.js',
+            // Add others as needed
+          },
+        },
+      },
+    }),
+  ],
+};
+```
+
+### Mock Files
+
+Create `src/__mocks__/observable-api.js`:
+
+```javascript
+export class UmbStringState {
+  #value;
+  #subscribers = [];
+
+  constructor(initialValue) {
+    this.#value = initialValue;
+  }
+
+  getValue() { return this.#value; }
+
+  setValue(value) {
+    this.#value = value;
+    this.#subscribers.forEach(cb => cb(value));
+  }
+
+  asObservable() {
+    return {
+      subscribe: (callback) => {
+        this.#subscribers.push(callback);
+        callback(this.#value);
+        return { unsubscribe: () => {
+          const idx = this.#subscribers.indexOf(callback);
+          if (idx > -1) this.#subscribers.splice(idx, 1);
+        }};
+      }
+    };
+  }
+
+  destroy() { this.#subscribers = []; }
+}
+```
+
+Create `src/__mocks__/lit.js`:
+
+```javascript
+export const html = (strings, ...values) => ({ strings, values });
+export const css = (strings, ...values) => ({ strings, values });
+export const nothing = Symbol('nothing');
+export const customElement = (name) => (target) => target;
+export const state = () => (target, propertyKey) => {};
+```
+
+### Testing with Mocks
+
+```typescript
+import { expect } from '@open-wc/testing';
+import { OUR_ENTITY_TYPE } from './types.js';
+
+describe('Entity Types', () => {
+  it('should define entity type', () => {
+    expect(OUR_ENTITY_TYPE).to.equal('our-entity');
+  });
+});
+```
+
+### When to Use Each Approach
+
+| Scenario | Approach |
+|----------|----------|
+| Testing types, constants, pure functions | Mock-based (simpler) |
+| Testing observable state patterns | Mock-based (simpler) |
+| Testing Lit elements with shadow DOM | Full Umbraco imports |
+| Testing context consumption between elements | Full Umbraco imports |
+| Testing with UUI components | Full Umbraco imports |
+
+### Working Example
+
+See **tree-example** in `umbraco-backoffice/examples/tree-example/Client/`:
+- `web-test-runner.config.mjs` - Mock-based configuration
+- `src/__mocks__/` - Mock implementations
+- `src/**/*.test.ts` - Unit tests using mocks
+
 ### Directory Structure
 
 ```

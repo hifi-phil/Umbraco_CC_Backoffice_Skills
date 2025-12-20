@@ -88,6 +88,62 @@ Best for full acceptance testing:
 
 ---
 
+## Complete Testing Pyramid
+
+A well-tested extension uses multiple testing levels. Here's the complete pyramid:
+
+```
+                    ┌─────────────┐
+                    │   E2E Tests │  ← Real backend, complete workflows
+                    │   (7 tests) │
+                    └─────────────┘
+              ┌─────────────────────────┐
+              │   Mocked Backoffice     │  ← No backend, realistic UI
+              │   MSW: 6 | Mock Repo: 6 │
+              └─────────────────────────┘
+        ┌─────────────────────────────────────┐
+        │           Unit Tests                │  ← Fast, isolated
+        │           (13 tests)                │
+        └─────────────────────────────────────┘
+```
+
+### Test Count by Level
+
+| Level | Tests | Speed | Backend Required |
+|-------|-------|-------|------------------|
+| Unit | 13 | ~1s | None |
+| MSW Mocked | 6 | ~30s | None (MSW) |
+| Mock Repository | 6 | ~37s | None |
+| E2E | 7 | ~15s | Real Umbraco |
+| **Total** | **32** | | |
+
+### Working Example: tree-example
+
+The `tree-example` demonstrates all testing approaches in one project:
+
+```bash
+cd /path/to/tree-example/Client
+
+# Unit tests (fast, no server)
+npm test                        # 13 tests, ~1s
+
+# MSW mocked tests (requires mocked backoffice)
+npm run test:mocked:msw         # 6 tests, ~30s
+
+# Mock repository tests (requires mocked backoffice)
+npm run test:mocked:repo        # 6 tests, ~37s
+
+# E2E tests (requires real Umbraco)
+URL=https://localhost:44325 \
+UMBRACO_USER_LOGIN=admin@example.com \
+UMBRACO_USER_PASSWORD=yourpassword \
+npm run test:e2e                # 7 tests, ~15s
+```
+
+**Location**: `umbraco-backoffice/examples/tree-example/Client/`
+
+---
+
 ## Reference Examples
 
 The Umbraco-CMS repository contains extensive test examples:
@@ -98,3 +154,4 @@ The Umbraco-CMS repository contains extensive test examples:
 | MSW handlers | `src/Umbraco.Web.UI.Client/src/mocks/handlers/` |
 | E2E tests | `tests/Umbraco.Tests.AcceptanceTest/tests/` |
 | Extensions | `src/Umbraco.Web.UI.Client/examples/` (27 examples) |
+| **Complete pyramid** | `umbraco-backoffice/examples/tree-example/Client/` |
