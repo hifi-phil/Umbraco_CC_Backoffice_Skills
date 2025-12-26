@@ -15,7 +15,7 @@ A tree in Umbraco is a hierarchical structure of nodes registered in the Backoff
 Always fetch the latest docs before implementing:
 
 - **Main docs**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/tree
-- **Sections & Trees**: https://docs.umbraco.com/umbraco-cms/customizing/section-trees
+- **Sections & Trees**: https://docs.umbraco.com/umbraco-cms/customizing/overview
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 - **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
 

@@ -30,7 +30,7 @@ Generate complete, testable example extensions for the Umbraco backoffice and ru
 ### 1. Clone Umbraco source (one-time setup)
 
 ```bash
-git clone https://github.com/umbraco/Umbraco-CMS.git
+git clone https://github.com/umbraco/Umbraco-CMS
 cd Umbraco-CMS/src/Umbraco.Web.UI.Client
 npm install
 ```
@@ -146,7 +146,7 @@ if (import.meta.env.VITE_EXTERNAL_EXTENSION) {
 Clone and set up the Umbraco source:
 
 ```bash
-git clone https://github.com/umbraco/Umbraco-CMS.git
+git clone https://github.com/umbraco/Umbraco-CMS
 cd Umbraco-CMS/src/Umbraco.Web.UI.Client
 npm install
 ```

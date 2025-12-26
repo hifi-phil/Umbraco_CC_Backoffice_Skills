@@ -16,7 +16,7 @@ Always fetch the latest docs before implementing:
 
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 - **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
-- **User Permissions**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/user-permissions
+- **User Permissions**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types
 
 ## Reference Example
 

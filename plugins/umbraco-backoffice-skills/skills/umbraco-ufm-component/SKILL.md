@@ -16,7 +16,7 @@ Always fetch the latest docs before implementing:
 
 - **Foundation**: https://docs.umbraco.com/umbraco-cms/customizing/foundation
 - **Extension Registry**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-registry
-- **UFM**: https://docs.umbraco.com/umbraco-cms/customizing/extending-overview/extension-types/ufm-component
+- **UFM**: https://docs.umbraco.com/umbraco-cms/reference/umbraco-flavored-markdown
 
 ## Reference Example
 
