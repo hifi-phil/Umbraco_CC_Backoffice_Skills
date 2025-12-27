@@ -1,6 +1,7 @@
 ---
 description: Validate links, code examples, and references in all SKILL.md files
 allowed-tools: Bash, Read, Glob, Task, AskUserQuestion, Edit
+arg-hints: --skip-tests
 ---
 
 # Validate Skills
@@ -154,3 +155,29 @@ All validators save JSON reports to the project root:
 - `validation-report.json` - Link validation results
 - `code-analysis-report.json` - Code analysis results
 - `test-report.json` - Test execution results
+
+---
+
+## Execution Instructions
+
+**You MUST execute all phases in order (unless user specifies otherwise):**
+
+1. Run Phase 1 (Link Validation) and Phase 2 (Code Analysis) in parallel
+2. Run Phase 3 (Tests) - unless user passes `--skip-tests`
+3. Read all JSON reports (2 or 3 depending on whether tests ran)
+4. Present the combined report to the user
+5. If issues found, ask user about fixes
+
+**Options:**
+- `/validate-skills` - Run all phases including tests
+- `/validate-skills --skip-tests` - Skip Phase 3 (tests), only run link and code validation
+
+**For Phase 3 (Tests)**, use these environment variables:
+```bash
+URL=https://localhost:44325 \
+UMBRACO_USER_LOGIN=admin@example.com \
+UMBRACO_USER_PASSWORD=1234567890 \
+npx tsx run-tests.ts
+```
+
+If Umbraco credentials are not available, tests will still run but E2E tests may be skipped. Unit and mocked tests do not require credentials.

@@ -115,6 +115,9 @@ out/
 # Testing
 coverage/
 .nyc_output/
+playwright-report/
+test-results/
+.auth/
 
 # Misc
 .DS_Store

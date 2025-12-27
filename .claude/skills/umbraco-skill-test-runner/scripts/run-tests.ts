@@ -116,18 +116,13 @@ async function discoverTestableExamples(): Promise<TestableExample[]> {
  */
 async function checkUmbracoHealth(url: string): Promise<boolean> {
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000);
-
-    const response = await fetch(`${url}/umbraco`, {
-      method: 'GET',
-      signal: controller.signal,
-      // @ts-ignore - Node.js fetch option
-      rejectUnauthorized: false
+    // Use curl for reliable HTTPS handling with self-signed certs
+    const result = execSync(`curl -k -s -o /dev/null -w "%{http_code}" "${url}/umbraco" --connect-timeout 5`, {
+      timeout: 10000,
+      encoding: 'utf-8'
     });
-
-    clearTimeout(timeout);
-    return response.status < 500;
+    const statusCode = parseInt(result.trim(), 10);
+    return statusCode > 0 && statusCode < 500;
   } catch {
     return false;
   }
