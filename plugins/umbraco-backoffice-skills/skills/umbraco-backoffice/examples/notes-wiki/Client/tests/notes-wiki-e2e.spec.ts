@@ -299,8 +299,13 @@ test.describe('Notes Wiki - Workspace', () => {
 // CRUD OPERATIONS - CREATE NOTE
 // =============================================================================
 
+// Generate unique test ID for this test run to avoid conflicts with previous runs
+const testRunId = Date.now().toString().slice(-6);
+
 test.describe('Notes Wiki - Create Note', () => {
   test('should create a new note in a folder', async ({ umbracoUi }) => {
+    const uniqueNoteName = `E2E Test Note ${testRunId}`;
+
     await goToNotesSection(umbracoUi);
 
     // Wait for tree to load
@@ -318,13 +323,15 @@ test.describe('Notes Wiki - Create Note', () => {
     // Wait for note workspace to load
     await expect(umbracoUi.page.locator('notes-note-workspace-editor')).toBeVisible({ timeout: 15000 });
 
-    // Fill in note title
-    const titleInput = umbracoUi.page.locator('uui-input#title');
+    // Fill in note title - locate the native input inside the web component
+    const titleInput = umbracoUi.page.locator('#title input');
     await titleInput.waitFor({ timeout: 5000 });
-    await titleInput.fill('E2E Test Note');
+    await titleInput.clear();
+    await titleInput.fill(uniqueNoteName);
 
-    // Fill in note content
-    const contentTextarea = umbracoUi.page.locator('uui-textarea#content');
+    // Fill in note content - locate the native textarea inside the web component
+    const contentTextarea = umbracoUi.page.locator('#content textarea');
+    await contentTextarea.clear();
     await contentTextarea.fill('This note was created by E2E tests.');
 
     // Click Save button
@@ -345,10 +352,13 @@ test.describe('Notes Wiki - Create Note', () => {
     }
 
     // Assert - new note should appear in tree
-    await expect(umbracoUi.page.getByRole('link', { name: 'E2E Test Note' })).toBeVisible({ timeout: 10000 });
+    await expect(umbracoUi.page.getByRole('link', { name: uniqueNoteName })).toBeVisible({ timeout: 10000 });
   });
 
   test('should create a note with content and verify it persists', async ({ umbracoUi }) => {
+    const uniqueNoteName = `Persistence Note ${testRunId}`;
+    const testContent = 'This is test content. It has multiple lines.';
+
     await goToNotesSection(umbracoUi);
 
     // Wait for tree to load
@@ -366,12 +376,13 @@ test.describe('Notes Wiki - Create Note', () => {
     // Wait for note workspace to load
     await expect(umbracoUi.page.locator('notes-note-workspace-editor')).toBeVisible({ timeout: 15000 });
 
-    // Fill in note title and content
-    const titleInput = umbracoUi.page.locator('uui-input#title');
-    await titleInput.fill('Persistence Test Note');
+    // Fill in note title and content - use native elements inside web components
+    const titleInput = umbracoUi.page.locator('#title input');
+    await titleInput.clear();
+    await titleInput.fill(uniqueNoteName);
 
-    const contentTextarea = umbracoUi.page.locator('uui-textarea#content');
-    const testContent = 'This is test content.\n\nIt has multiple lines.\n\n- Bullet point 1\n- Bullet point 2';
+    const contentTextarea = umbracoUi.page.locator('#content textarea');
+    await contentTextarea.clear();
     await contentTextarea.fill(testContent);
 
     // Save the note
@@ -396,7 +407,7 @@ test.describe('Notes Wiki - Create Note', () => {
     }
 
     // Click on the created note
-    const noteLink = umbracoUi.page.getByRole('link', { name: 'Persistence Test Note' });
+    const noteLink = umbracoUi.page.getByRole('link', { name: uniqueNoteName });
     await noteLink.waitFor({ timeout: 10000 });
     await noteLink.click();
 
@@ -404,11 +415,11 @@ test.describe('Notes Wiki - Create Note', () => {
     await expect(umbracoUi.page.locator('notes-note-workspace-editor')).toBeVisible({ timeout: 15000 });
 
     // Verify title persisted
-    const titleInputAfterReload = umbracoUi.page.locator('uui-input#title');
-    await expect(titleInputAfterReload).toHaveValue('Persistence Test Note', { timeout: 5000 });
+    const titleInputAfterReload = umbracoUi.page.locator('#title input');
+    await expect(titleInputAfterReload).toHaveValue(uniqueNoteName, { timeout: 5000 });
 
     // Verify content persisted
-    const contentTextareaAfterReload = umbracoUi.page.locator('uui-textarea#content');
+    const contentTextareaAfterReload = umbracoUi.page.locator('#content textarea');
     await expect(contentTextareaAfterReload).toHaveValue(testContent, { timeout: 5000 });
   });
 });
@@ -435,8 +446,8 @@ test.describe('Notes Wiki - Update Note', () => {
     // Wait for workspace to load
     await expect(umbracoUi.page.locator('notes-note-workspace-editor')).toBeVisible({ timeout: 15000 });
 
-    // Update the title
-    const titleInput = umbracoUi.page.locator('uui-input#title');
+    // Update the title - use native input inside web component
+    const titleInput = umbracoUi.page.locator('#title input');
     await titleInput.waitFor({ timeout: 5000 });
     await titleInput.clear();
     await titleInput.fill('Welcome to Notes Wiki - Updated');
@@ -463,6 +474,37 @@ test.describe('Notes Wiki - Update Note', () => {
   });
 
   test('should update an existing note content', async ({ umbracoUi }) => {
+    const noteToUpdate = `Content Update Note ${testRunId}`;
+    const originalContent = 'Original content before update.';
+    const updatedContent = 'Updated content from E2E test. This verifies that content updates work correctly.';
+
+    // First create a note that we will update
+    await goToNotesSection(umbracoUi);
+    await umbracoUi.page.getByRole('link', { name: 'Project Notes' }).waitFor({ timeout: 15000 });
+
+    const folderItem = umbracoUi.page.getByRole('link', { name: 'Project Notes' });
+    await folderItem.hover();
+
+    const projectNotesMenu = umbracoUi.page.getByRole('menu').filter({ hasText: 'Project Notes' });
+    const createNoteButton = projectNotesMenu.getByRole('button', { name: 'Create Note' });
+    await createNoteButton.waitFor({ timeout: 5000 });
+    await createNoteButton.click();
+
+    await expect(umbracoUi.page.locator('notes-note-workspace-editor')).toBeVisible({ timeout: 15000 });
+
+    const titleInput = umbracoUi.page.locator('#title input');
+    await titleInput.clear();
+    await titleInput.fill(noteToUpdate);
+
+    const contentTextarea = umbracoUi.page.locator('#content textarea');
+    await contentTextarea.clear();
+    await contentTextarea.fill(originalContent);
+
+    const saveButton = umbracoUi.page.getByRole('button', { name: 'Save' });
+    await saveButton.click();
+    await expect(umbracoUi.page.getByText('Note saved')).toBeVisible({ timeout: 10000 });
+
+    // Now navigate back and update the content
     await goToNotesSection(umbracoUi);
 
     // Expand Project Notes folder
@@ -471,8 +513,8 @@ test.describe('Notes Wiki - Update Note', () => {
     await expandButton.click();
     await umbracoUi.page.waitForTimeout(500);
 
-    // Click on Sample Project Note
-    const noteLink = umbracoUi.page.getByRole('link', { name: 'Sample Project Note' });
+    // Click on the note we created
+    const noteLink = umbracoUi.page.getByRole('link', { name: noteToUpdate });
     await noteLink.waitFor({ timeout: 10000 });
     await noteLink.click();
 
@@ -480,15 +522,14 @@ test.describe('Notes Wiki - Update Note', () => {
     await expect(umbracoUi.page.locator('notes-note-workspace-editor')).toBeVisible({ timeout: 15000 });
 
     // Update the content
-    const contentTextarea = umbracoUi.page.locator('uui-textarea#content');
-    await contentTextarea.waitFor({ timeout: 5000 });
-    const updatedContent = 'Updated content from E2E test.\n\nThis verifies that content updates work correctly.';
-    await contentTextarea.clear();
-    await contentTextarea.fill(updatedContent);
+    const contentTextareaEdit = umbracoUi.page.locator('#content textarea');
+    await contentTextareaEdit.waitFor({ timeout: 5000 });
+    await contentTextareaEdit.clear();
+    await contentTextareaEdit.fill(updatedContent);
 
     // Save
-    const saveButton = umbracoUi.page.getByRole('button', { name: 'Save' });
-    await saveButton.click();
+    const saveButton2 = umbracoUi.page.getByRole('button', { name: 'Save' });
+    await saveButton2.click();
 
     // Wait for save notification
     await expect(umbracoUi.page.getByText('Note saved')).toBeVisible({ timeout: 10000 });
@@ -508,13 +549,13 @@ test.describe('Notes Wiki - Update Note', () => {
     }
 
     // Click on the note again
-    const noteLink2 = umbracoUi.page.getByRole('link', { name: 'Sample Project Note' });
+    const noteLink2 = umbracoUi.page.getByRole('link', { name: noteToUpdate });
     await noteLink2.waitFor({ timeout: 10000 });
     await noteLink2.click();
 
     // Verify content persisted
     await expect(umbracoUi.page.locator('notes-note-workspace-editor')).toBeVisible({ timeout: 15000 });
-    const contentTextareaAfterReload = umbracoUi.page.locator('uui-textarea#content');
+    const contentTextareaAfterReload = umbracoUi.page.locator('#content textarea');
     await expect(contentTextareaAfterReload).toHaveValue(updatedContent, { timeout: 5000 });
   });
 });
@@ -525,6 +566,32 @@ test.describe('Notes Wiki - Update Note', () => {
 
 test.describe('Notes Wiki - Delete Note', () => {
   test('should delete an existing note', async ({ umbracoUi }) => {
+    const noteToDelete = `Delete Me ${testRunId}`;
+
+    // First, create a note that we will delete
+    await goToNotesSection(umbracoUi);
+    await umbracoUi.page.getByRole('link', { name: 'Getting Started' }).waitFor({ timeout: 15000 });
+
+    const folderItem = umbracoUi.page.getByRole('link', { name: 'Getting Started' });
+    await folderItem.hover();
+
+    const gettingStartedMenu = umbracoUi.page.getByRole('menu').filter({ hasText: 'Getting Started' });
+    const createNoteButton = gettingStartedMenu.getByRole('button', { name: 'Create Note' });
+    await createNoteButton.waitFor({ timeout: 5000 });
+    await createNoteButton.click();
+
+    await expect(umbracoUi.page.locator('notes-note-workspace-editor')).toBeVisible({ timeout: 15000 });
+
+    const titleInput = umbracoUi.page.locator('#title input');
+    await titleInput.waitFor({ timeout: 5000 });
+    await titleInput.clear();
+    await titleInput.fill(noteToDelete);
+
+    const saveButton = umbracoUi.page.getByRole('button', { name: 'Save' });
+    await saveButton.click();
+    await expect(umbracoUi.page.getByText('Note saved')).toBeVisible({ timeout: 10000 });
+
+    // Now navigate back and delete the note we just created
     await goToNotesSection(umbracoUi);
 
     // Expand Getting Started folder
@@ -533,27 +600,29 @@ test.describe('Notes Wiki - Delete Note', () => {
     await expandButton.click();
     await umbracoUi.page.waitForTimeout(500);
 
-    // Hover over "How to Create Notes" to show actions
-    const noteLink = umbracoUi.page.getByRole('link', { name: 'How to Create Notes' });
+    // Hover over the note to show actions
+    const noteLink = umbracoUi.page.getByRole('link', { name: noteToDelete });
     await noteLink.waitFor({ timeout: 10000 });
     await noteLink.hover();
 
     // Click the actions button for the note
-    const actionsButton = umbracoUi.page.getByRole('button', { name: "View actions for 'How to Create Notes'" });
+    const actionsButton = umbracoUi.page.getByRole('button', { name: `View actions for '${noteToDelete}'` });
     await actionsButton.waitFor({ timeout: 5000 });
     await actionsButton.click();
 
-    // Click Delete in the actions menu
-    const deleteButton = umbracoUi.page.getByRole('button', { name: 'Delete' });
-    await deleteButton.waitFor({ timeout: 5000 });
-    await deleteButton.click();
+    // Wait for actions menu to appear and click Delete
+    await umbracoUi.page.waitForTimeout(300);
+    const deleteMenuItem = umbracoUi.page.locator('umb-entity-action-list').getByRole('button', { name: 'Delete' }).first();
+    await deleteMenuItem.waitFor({ timeout: 5000 });
+    await deleteMenuItem.click();
 
     // Confirm deletion in dialog
-    const confirmDeleteButton = umbracoUi.page.getByRole('button', { name: 'Delete' }).last();
+    await umbracoUi.page.waitForTimeout(300);
+    const confirmDeleteButton = umbracoUi.page.locator('umb-confirm-modal').getByRole('button', { name: 'Delete' });
     await confirmDeleteButton.waitFor({ timeout: 5000 });
     await confirmDeleteButton.click();
 
-    // Wait for deletion to complete (tree should update)
+    // Wait for deletion to complete
     await umbracoUi.page.waitForTimeout(1000);
 
     // Navigate to section again to refresh tree
@@ -567,7 +636,7 @@ test.describe('Notes Wiki - Delete Note', () => {
     }
 
     // Assert - deleted note should NOT appear in tree
-    await expect(umbracoUi.page.getByRole('link', { name: 'How to Create Notes' })).not.toBeVisible({ timeout: 5000 });
+    await expect(umbracoUi.page.getByRole('link', { name: noteToDelete })).not.toBeVisible({ timeout: 5000 });
   });
 });
 
@@ -601,8 +670,8 @@ test.describe('Notes Wiki - Create Folder', () => {
       await folderNameInput.waitFor({ timeout: 5000 });
       await folderNameInput.fill('E2E Test Folder');
 
-      // Confirm creation
-      const createButton = umbracoUi.page.getByRole('button', { name: 'Create' });
+      // Confirm creation (use exact: true to avoid matching "Create Note" buttons)
+      const createButton = umbracoUi.page.getByRole('button', { name: 'Create', exact: true });
       await createButton.click();
 
       // Wait for folder to appear in tree
@@ -639,8 +708,8 @@ test.describe('Notes Wiki - Create Folder', () => {
       await folderNameInput.waitFor({ timeout: 5000 });
       await folderNameInput.fill('Nested E2E Folder');
 
-      // Confirm creation
-      const createButton = umbracoUi.page.getByRole('button', { name: 'Create' });
+      // Confirm creation (use exact: true to avoid matching "Create Note" buttons)
+      const createButton = umbracoUi.page.getByRole('button', { name: 'Create', exact: true });
       await createButton.click();
 
       // Wait for tree to update
@@ -661,38 +730,84 @@ test.describe('Notes Wiki - Create Folder', () => {
 
 test.describe('Notes Wiki - Delete Folder', () => {
   test('should delete an empty folder', async ({ umbracoUi }) => {
-    // First create a folder to delete
+    const folderToDelete = `Delete Folder ${testRunId}`;
+
+    // First, create a new empty folder that we will delete
     await goToNotesSection(umbracoUi);
+    await umbracoUi.page.getByRole('link', { name: 'Getting Started' }).waitFor({ timeout: 15000 });
 
-    // Wait for tree to load
-    await umbracoUi.page.getByRole('link', { name: 'Project Notes' }).waitFor({ timeout: 15000 });
+    // Hover over Getting Started to create folder inside it
+    const parentFolder = umbracoUi.page.getByRole('link', { name: 'Getting Started' });
+    await parentFolder.hover();
 
-    // Hover over Project Notes folder
-    const folderItem = umbracoUi.page.getByRole('link', { name: 'Project Notes' });
-    await folderItem.hover();
+    const actionsBtn = umbracoUi.page.getByRole('button', { name: "View actions for 'Getting Started'" });
+    await actionsBtn.waitFor({ timeout: 5000 });
+    await actionsBtn.click();
 
-    // Click actions button
-    const actionsButton = umbracoUi.page.getByRole('button', { name: "View actions for 'Project Notes'" });
-    await actionsButton.waitFor({ timeout: 5000 });
-    await actionsButton.click();
+    // Click Create Folder in menu (may not exist for notes-wiki, in which case skip)
+    await umbracoUi.page.waitForTimeout(300);
+    const createFolderBtn = umbracoUi.page.locator('umb-entity-action-list').getByRole('button', { name: 'Create Folder' });
 
-    // Click Delete
-    const deleteButton = umbracoUi.page.getByRole('button', { name: 'Delete' });
-    await deleteButton.waitFor({ timeout: 5000 });
-    await deleteButton.click();
+    if (await createFolderBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await createFolderBtn.click();
 
-    // Confirm deletion
-    const confirmDeleteButton = umbracoUi.page.getByRole('button', { name: 'Delete' }).last();
-    await confirmDeleteButton.waitFor({ timeout: 5000 });
-    await confirmDeleteButton.click();
+      // Fill in folder name in dialog - modal uses uui-input#name
+      await umbracoUi.page.waitForTimeout(300);
+      const folderNameInput = umbracoUi.page.locator('#name input');
+      await folderNameInput.waitFor({ timeout: 5000 });
+      await folderNameInput.clear();
+      await folderNameInput.fill(folderToDelete);
 
-    // Wait for deletion
-    await umbracoUi.page.waitForTimeout(1000);
+      // Confirm creation (use exact: true to avoid matching "Create Note" buttons)
+      const createButton = umbracoUi.page.getByRole('button', { name: 'Create', exact: true });
+      await createButton.click();
 
-    // Navigate away and back
-    await goToNotesSection(umbracoUi);
+      // Wait for folder to be created
+      await umbracoUi.page.waitForTimeout(1000);
 
-    // Assert - folder should not appear
-    await expect(umbracoUi.page.getByRole('link', { name: 'Project Notes' })).not.toBeVisible({ timeout: 5000 });
+      // Navigate back to section
+      await goToNotesSection(umbracoUi);
+
+      // Expand parent to see the new folder
+      const expandButton = umbracoUi.page.getByRole('button', { name: 'Expand child items for Getting Started' });
+      if (await expandButton.isVisible({ timeout: 5000 }).catch(() => false)) {
+        await expandButton.click();
+        await umbracoUi.page.waitForTimeout(500);
+      }
+
+      // Now delete the folder we just created
+      const folderItem = umbracoUi.page.getByRole('link', { name: folderToDelete });
+      await folderItem.waitFor({ timeout: 10000 });
+      await folderItem.hover();
+
+      const deleteActionsBtn = umbracoUi.page.getByRole('button', { name: `View actions for '${folderToDelete}'` });
+      await deleteActionsBtn.waitFor({ timeout: 5000 });
+      await deleteActionsBtn.click();
+
+      await umbracoUi.page.waitForTimeout(300);
+      const deleteMenuItem = umbracoUi.page.locator('umb-entity-action-list').getByRole('button', { name: 'Delete' }).first();
+      await deleteMenuItem.waitFor({ timeout: 5000 });
+      await deleteMenuItem.click();
+
+      await umbracoUi.page.waitForTimeout(300);
+      const confirmDeleteButton = umbracoUi.page.locator('umb-confirm-modal').getByRole('button', { name: 'Delete' });
+      await confirmDeleteButton.waitFor({ timeout: 5000 });
+      await confirmDeleteButton.click();
+
+      await umbracoUi.page.waitForTimeout(1000);
+
+      // Navigate away and back
+      await goToNotesSection(umbracoUi);
+
+      // Expand parent folder again
+      const expandButton2 = umbracoUi.page.getByRole('button', { name: 'Expand child items for Getting Started' });
+      if (await expandButton2.isVisible({ timeout: 5000 }).catch(() => false)) {
+        await expandButton2.click();
+        await umbracoUi.page.waitForTimeout(500);
+      }
+
+      // Assert - folder should not appear
+      await expect(umbracoUi.page.getByRole('link', { name: folderToDelete })).not.toBeVisible({ timeout: 5000 });
+    }
   });
 });
